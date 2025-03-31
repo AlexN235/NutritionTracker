@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NutruitionTracker.InputMealPage"
+             xmlns:viewmodel="clr-namespace:NutruitionTracker.ViewModel"
+             x:DataType="viewmodel:InputMealViewModel"
+             xmlns:local="clr-namespace:NutruitionTracker"
+             Title="InputMealPage">
+    <VerticalStackLayout
+        Padding="10"
+        Spacing="5"
+        BackgroundColor="White"
+        >
+        <Button
+            Text="GoBack"
+            HorizontalOptions="Start"
+            Command="{Binding GoBackCommand}"
+            />
+        
+        <Grid RowDefinitions="0.5*, Auto, *"
+              ColumnDefinitions="0.5*, 0.5*, 0.25*"
+              Padding="10"
+              RowSpacing="10"
+              ColumnSpacing="10">
+            <Label 
+                Text="Ingredients"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                TextColor="Black"
+                Grid.Row="1"
+                Grid.Column="0"/>
+            <Label 
+                Text="g"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                TextColor="Black"
+                Grid.Row="1"
+                Grid.Column="1"/>
+            <Entry
+                Background="LightGray"
+                Text="{Binding IngrediantText}"
+                VerticalOptions="Center"
+                HorizontalOptions="Fill"
+                Grid.Row="0"
+                Grid.Column="0"/>
+            <Entry
+                Background="LightGray"
+                Text="{Binding WeightText}"
+                VerticalOptions="Center"
+                HorizontalOptions="Fill"
+                Grid.Row="0"
+                Grid.Column="1"/>
+            <Button
+                Text="Add Ingredient"
+                Command="{Binding AddCommand}"
+                HorizontalOptions="End"
+                VerticalOptions="Center"
+                Grid.Row="0"
+                Grid.Column="2"/>
+
+        </Grid>
+
+        <CollectionView
+             HorizontalOptions="Center"
+             BackgroundColor="Transparent"
+             ItemsSource="{Binding Ingredients}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="local:Ingredient">
+                        <Grid ColumnDefinitions="0.5*, 0.5*, 0.25*">
+                            <Label Text="{Binding name}" Grid.Column="0" TextColor="Black" HorizontalOptions="Center"/>
+                            <Label Text="{Binding amount}" Grid.Column="1" TextColor="Black" HorizontalOptions="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Text="Okay"
+                VerticalOptions="End"/>
+
+    </VerticalStackLayout>
+    
+</ContentPage>

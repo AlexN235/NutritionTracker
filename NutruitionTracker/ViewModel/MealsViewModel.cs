@@ -10,5 +10,11 @@ public partial class MealsViewModel : ObservableObject
     {
         await Shell.Current.GoToAsync("..");
     }
+
+    [RelayCommand]
+    async Task AddMeal()
+    {
+        await Shell.Current.GoToAsync(nameof(InputMealPage));
+    }
 }
 

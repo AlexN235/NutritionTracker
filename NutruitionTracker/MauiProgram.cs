@@ -22,6 +22,9 @@ public static class MauiProgram
 		builder.Services.AddTransient<Meals>();
 		builder.Services.AddTransient<MealsViewModel>();
 
+		builder.Services.AddTransient<InputMealPage>();
+		builder.Services.AddTransient<InputMealViewModel>();
+
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif

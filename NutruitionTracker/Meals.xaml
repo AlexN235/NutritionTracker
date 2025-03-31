@@ -22,12 +22,38 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <CollectionView/>
+        <CollectionView
+            Grid.ColumnSpan="2">
+            <CollectionView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Chicken Burritos</x:String>
+                    <x:String>Apple Pie</x:String>
+                </x:Array>
+            </CollectionView.ItemsSource>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="5,5">
+                        <Border Padding="10, 10"
+                                Stroke="Grey"
+                                StrokeLineJoin="Round"
+                                StrokeThickness="5">
+                            
+                            <Label Text="{Binding .}"
+                                FontSize="20"
+                                TextColor="Black"/>
+                        </Border>
+                    </Grid>
+                    
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
         <Button
             Text="Add Meal"
             FontSize="20"
             Padding="10"
-            VerticalOptions="End"/>  
+            VerticalOptions="End"
+            Command="{Binding AddMealCommand}"/>  
            
     </VerticalStackLayout>
     
