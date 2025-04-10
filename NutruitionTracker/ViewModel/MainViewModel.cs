@@ -1,11 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using NutruitionTracker.NutritionFacts;
+using System.Runtime.InteropServices;
 
 namespace NutruitionTracker.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
+    NutritionDatabase db;
 
+    public MainViewModel()
+    {
+        db  = new NutritionDatabase();
+    }
 
     [ObservableProperty]
     public string text;
@@ -19,6 +26,11 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     async Task GoToMeals(string s) 
     {
-        await Shell.Current.GoToAsync(nameof(Meals));
+        await Shell.Current.GoToAsync(nameof(MyMeals),
+            new Dictionary<string, object>
+            {
+                ["NutritionDB"] = db
+            });
     }
+
 }
