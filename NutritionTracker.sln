@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NutritionTracker", "NutruitionTracker\NutritionTracker.csproj", "{4826178C-309D-4EC3-96CF-5556ACDAFC96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NutritionTracker", "NutritionTracker\NutritionTracker.csproj", "{4826178C-309D-4EC3-96CF-5556ACDAFC96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

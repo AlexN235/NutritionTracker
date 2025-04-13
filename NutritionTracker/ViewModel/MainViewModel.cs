@@ -7,11 +7,9 @@ namespace NutruitionTracker.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
-    NutritionDatabase db;
 
     public MainViewModel()
     {
-        db  = new NutritionDatabase();
     }
 
     [ObservableProperty]
@@ -26,11 +24,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     async Task GoToMeals(string s) 
     {
-        await Shell.Current.GoToAsync(nameof(MyMeals),
-            new Dictionary<string, object>
-            {
-                ["NutritionDB"] = db
-            });
+        await Shell.Current.GoToAsync(nameof(MyMeals));
     }
 
 }

@@ -1,3 +1,4 @@
+using NutruitionTracker.NutritionFacts;
 using NutruitionTracker.ViewModel;
 
 namespace NutruitionTracker;

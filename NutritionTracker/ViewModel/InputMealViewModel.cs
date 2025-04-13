@@ -7,7 +7,6 @@ using SQLite;
 using NutruitionTracker.NutritionFacts.Models;
 namespace NutruitionTracker.ViewModel;
 
-[QueryProperty(nameof(NutritionDatabase), nameof(NutritionDatabase))]
 public partial class InputMealViewModel : ObservableObject
 {
 
@@ -15,7 +14,7 @@ public partial class InputMealViewModel : ObservableObject
     public InputMealViewModel()
     {
         Ingredients = new ObservableCollection<Ingredient>();
-        breakpause();
+        db = new NutritionDatabase();
     }
 
     public void breakpause() { return; }
@@ -53,8 +52,6 @@ public partial class InputMealViewModel : ObservableObject
     {
 
     }
-
-
 
     public List<string> GetFromFood(string s) 
     {

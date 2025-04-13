@@ -23,6 +23,6 @@ public partial class InputMealPage : ContentPage
         searchBarList.Clear();
         string s = ((SearchBar)sender).Text;
         List<String> f = viewmodel.GetFromFood(s);
-        searchResults.ItemsSource = f.Take(5);
+        searchResults.ItemsSource = f;
     }
 }

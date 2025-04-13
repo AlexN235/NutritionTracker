@@ -16,7 +16,6 @@
         <Button x:Name="CounterBtn"
                 Text="Click me" 
                 SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
                 Grid.Row="1"
                 Grid.Column="0"/>
 
@@ -24,9 +23,6 @@
                 Command="{Binding GoToMealsCommand}"
                 Grid.Row="1"
                 Grid.Column="1"/>
-
-
-
 
 
     </Grid>
