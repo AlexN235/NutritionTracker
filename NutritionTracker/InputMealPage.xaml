@@ -81,6 +81,7 @@
         </CollectionView>
 
         <Button Text="Okay"
+                Command="{Binding AddMealCommand}"
                 VerticalOptions="End"/>
 
     </VerticalStackLayout>

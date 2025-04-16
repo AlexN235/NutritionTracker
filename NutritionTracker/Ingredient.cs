@@ -8,17 +8,16 @@ namespace NutruitionTracker;
 public class Ingredient
 {
     public String name { get; set; }
-    public String amount { get; set; }
+    public int amount { get; set; }
+    public int database_food_id { get; set; }
     String measurementType { get; set; }
 
-    public Ingredient() {
-        measurementType = "g";
-    }
-    public Ingredient(String name, String amount)
+    public Ingredient(String name, string amount, int database_food_id)
     {
-        this.name = name;
-        this.amount = amount;
         measurementType = "g";
+        this.name = name;
+        this.amount = Int32.Parse(amount);
+        this.database_food_id = database_food_id;
     }
 
     public override string ToString()

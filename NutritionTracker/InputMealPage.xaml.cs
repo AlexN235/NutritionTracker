@@ -25,4 +25,5 @@ public partial class InputMealPage : ContentPage
         List<String> f = viewmodel.GetFromFood(s);
         searchResults.ItemsSource = f;
     }
+
 }

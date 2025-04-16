@@ -1,20 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NutruitionTracker.NutritionFacts;
+using System.Collections.ObjectModel;
 
 namespace NutruitionTracker.ViewModel;
 
 public partial class MyMealsViewModel : ObservableObject
 {
-    public MyMealsViewModel() 
-    {
+    [ObservableProperty]
+    ObservableCollection<Meal> mealList = new ObservableCollection<Meal>();
 
-    }
-
-    public void breakpause() 
-    {
-        return;
-    }
+    private void breakpoint() { return; }
 
     [RelayCommand]
     async Task GoBack() 
@@ -27,5 +23,11 @@ public partial class MyMealsViewModel : ObservableObject
     {
         await Shell.Current.GoToAsync(nameof(InputMealPage));
     }
+
+    public void AddMeal(Meal newMeal) 
+    {
+        mealList.Add(newMeal);
+    }
+
 }
 

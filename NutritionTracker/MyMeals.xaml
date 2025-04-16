@@ -4,11 +4,12 @@
              x:Class="NutruitionTracker.MyMeals"
              xmlns:viewmodel="clr-namespace:NutruitionTracker.ViewModel"
              x:DataType="viewmodel:MyMealsViewModel"
+             xmlns:local="clr-namespace:NutruitionTracker"
              Title="MyMeals">
     <VerticalStackLayout
         Padding="20"
         BackgroundColor="White">
-
+        
         <Button 
         Text="Back"
         Command="{Binding GoBackCommand}"
@@ -20,32 +21,21 @@
         TextColor="Black"
         FontSize="25"
         VerticalOptions="Center" 
-        HorizontalOptions="Center" />
+        HorizontalOptions="Center"/>
 
         <CollectionView
-        Grid.ColumnSpan="2">
-            <CollectionView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Chicken Burritos</x:String>
-                    <x:String>Apple Pie</x:String>
-                </x:Array>
-            </CollectionView.ItemsSource>
+            HorizontalOptions="Center"
+            BackgroundColor="LightBlue"
+            ItemsSource="{Binding MealList}">
             <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="5,5">
-                        <Border Padding="10, 10"
-                            Stroke="Grey"
-                            StrokeLineJoin="Round"
-                            StrokeThickness="5">
-
-                            <Label Text="{Binding .}"
-                            FontSize="20"
-                            TextColor="Black"/>
-                        </Border>
+                <DataTemplate x:DataType="local:Meal">
+                    <Grid>
+                        <Label Text="{Binding name}"/>
                     </Grid>
-
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+            
+           
         </CollectionView>
 
         <Button

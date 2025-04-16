@@ -9,12 +9,13 @@ namespace NutruitionTracker.ViewModel;
 
 public partial class InputMealViewModel : ObservableObject
 {
-
     NutritionDatabase db;
-    public InputMealViewModel()
+    MyMealsViewModel myMealsVM;
+    public InputMealViewModel(MyMealsViewModel myMealsVM)
     {
         Ingredients = new ObservableCollection<Ingredient>();
         db = new NutritionDatabase();
+        this.myMealsVM = myMealsVM;
     }
 
     public void breakpause() { return; }
@@ -40,17 +41,19 @@ public partial class InputMealViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(IngrediantText) || string.IsNullOrWhiteSpace(WeightText))
             return;
 
-        Ingredient newItem = new Ingredient(IngrediantText, WeightText);
+        Ingredient newItem = new Ingredient(db.GetClosestName(IngrediantText), WeightText, db.GetClosestID(IngrediantText));
         Ingredients.Add(newItem);
 
         IngrediantText = string.Empty;
         WeightText = string.Empty;
     }
-    
 
-    void AddMeal()
+    [RelayCommand]
+    async Task AddMeal()
     {
-
+        Meal newMeal = new Meal("testName", 10, this.ingredients.ToList(), db);
+        myMealsVM.AddMeal(newMeal);
+        await Shell.Current.GoToAsync("..");
     }
 
     public List<string> GetFromFood(string s) 

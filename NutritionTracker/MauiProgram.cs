@@ -19,8 +19,8 @@ public static class MauiProgram
 		builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<MainViewModel>();
 
-		builder.Services.AddTransient<MyMeals>();
-		builder.Services.AddTransient<MyMealsViewModel>();
+		builder.Services.AddSingleton<MyMeals>();
+		builder.Services.AddSingleton<MyMealsViewModel>();
 
 		builder.Services.AddTransient<InputMealPage>();
 		builder.Services.AddTransient<InputMealViewModel>();
