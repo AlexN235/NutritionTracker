@@ -6,44 +6,63 @@
              x:DataType="viewmodel:MyMealsViewModel"
              xmlns:local="clr-namespace:NutruitionTracker"
              Title="MyMeals">
-    <VerticalStackLayout
+
+    <Grid
         Padding="20"
-        BackgroundColor="White">
-        
+        BackgroundColor="White"
+        RowSpacing="10"
+        ColumnSpacing="10"
+        RowDefinitions="auto, auto, auto, auto"
+        ColumnDefinitions="100, *, 100">
+
         <Button 
-        Text="Back"
-        Command="{Binding GoBackCommand}"
-        FontSize="20"
-        HorizontalOptions="Start"/>
+            Text="Back"
+            Command="{Binding GoBackCommand}"
+            FontSize="20"
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalOptions="Start"/>
 
         <Label 
-        Text="Meals!"
-        TextColor="Black"
-        FontSize="25"
-        VerticalOptions="Center" 
-        HorizontalOptions="Center"/>
+            Text="Meals!"
+            TextColor="Black"
+            FontSize="25"
+            Grid.Row="1"
+            Grid.Column="1"
+            HorizontalOptions="Center"/>
 
-        <CollectionView
-            HorizontalOptions="Center"
-            BackgroundColor="LightBlue"
-            ItemsSource="{Binding MealList}">
+        <CollectionView Grid.Row="2" Grid.Column="1" ItemsLayout="VerticalGrid" SelectionMode="Single" BackgroundColor="Transparent" ItemsSource="{Binding MealList}" EmptyView="No Data">
+           
+            <CollectionView.Header>
+                <Grid ColumnDefinitions="0.75*, 0.25*">
+                    <Label Text="Meals" HorizontalOptions="Center" Grid.Column="0"/>
+                    <Label Text="g" HorizontalOptions="Center" Grid.Column="1"/>
+                </Grid>
+            </CollectionView.Header>
+            
+            <CollectionView.Footer>
+                <Label Text="End of list." HorizontalOptions="Center"/>
+            </CollectionView.Footer>
+            
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="local:Meal">
-                    <Grid>
-                        <Label Text="{Binding name}"/>
-                    </Grid>
+                    <Border BackgroundColor="Transparent" Margin="10">
+                        <Grid ColumnDefinitions="0.75*, 0.25*"  BackgroundColor="Transparent" Padding="5">
+                            <Label HorizontalOptions="Center" Text="{Binding name}" TextColor="Black" Grid.Column="0"/>
+                            <Label HorizontalOptions="Center" Text="{Binding name}" TextColor="Red" Grid.Column="1"/>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-            
-           
         </CollectionView>
 
         <Button
-        Text="Add Meal"
-        FontSize="20"
-        Padding="10"
-        VerticalOptions="End"
-        Command="{Binding AddMealCommand}"/>
+            Text="Add Meal"
+            FontSize="20"
+            Padding="10"
+            Grid.Row="4"
+            Grid.Column="1"
+            Command="{Binding AddMealCommand}"/>
 
-    </VerticalStackLayout>
+    </Grid>
 </ContentPage>

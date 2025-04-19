@@ -4,28 +4,34 @@
              x:Class="NutruitionTracker.MainPage"
              xmlns:viewmodel="clr-namespace:NutruitionTracker.ViewModel"
              x:DataType="viewmodel:MainViewModel"
-             >
+             BackgroundColor="White">
+    
+    <Grid 
+        BackgroundColor="Transparent"
+        Padding="20"
+        RowSpacing="20"
+        ColumnSpacing="20"
+        RowDefinitions="*, auto, auto, 20*"
+        ColumnDefinitions="50, *, 50"
+        Margin="50">
 
 
-    <Grid RowDefinitions="100, Auto, *"
-          ColumnDefinitions=".5*, .5*"
-          Padding="10"
-          RowSpacing="10"
-          ColumnSpacing="10">
-        
-        <Button x:Name="CounterBtn"
-                Text="Click me" 
-                SemanticProperties.Hint="Counts the number of times you click"
+        <Button Text="Nutrition Facts Search" 
+                SemanticProperties.Hint="Check nutrition facts."
                 Grid.Row="1"
-                Grid.Column="0"/>
+                Grid.Column="1"
+                BorderWidth="2"
+                BorderColor="Grey"/>
 
-        <Button Text="something"
+        <Button Text="Meals Record"
                 Command="{Binding GoToMealsCommand}"
-                Grid.Row="1"
-                Grid.Column="1"/>
-
+                Grid.Row="2"
+                Grid.Column="1"
+                BorderWidth="2"
+                BorderColor="Grey"/>
 
     </Grid>
+    
    
 
 </ContentPage>

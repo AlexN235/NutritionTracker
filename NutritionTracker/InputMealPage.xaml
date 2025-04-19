@@ -6,6 +6,7 @@
              x:DataType="viewmodel:InputMealViewModel"
              xmlns:local="clr-namespace:NutruitionTracker"
              Title="InputMealPage">
+    
     <VerticalStackLayout
         Padding="10"
         Spacing="5"
