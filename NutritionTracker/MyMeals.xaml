@@ -49,7 +49,7 @@
                     <Border BackgroundColor="Transparent" Margin="10">
                         <Grid ColumnDefinitions="0.75*, 0.25*"  BackgroundColor="Transparent" Padding="5">
                             <Label HorizontalOptions="Center" Text="{Binding name}" TextColor="Black" Grid.Column="0"/>
-                            <Label HorizontalOptions="Center" Text="{Binding name}" TextColor="Red" Grid.Column="1"/>
+                            <Label HorizontalOptions="Center" Text="{Binding totalWeight}" TextColor="Red" Grid.Column="1"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

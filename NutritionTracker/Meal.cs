@@ -8,7 +8,7 @@ namespace NutruitionTracker;
 public class Meal
 {
     public String name { get; set; }
-    private int totalWeight { get; set; }
+    public int totalWeight { get; set; }
     private int calories { get; set; }
     private int protein { get; set; }
     private int fibre { get; set; }

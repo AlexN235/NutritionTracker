@@ -18,7 +18,7 @@ public class NutritionDatabase
         conn.CreateTable<NutrientAmount>(); ///food_code, nutrient_value, nutrient_name_idsqlite
     }
 
-    public List<string> GetFood(string name)
+    public List<string> GetFoodName(string name)
     {
         if (name == "")
             return new List<String>();
@@ -29,7 +29,18 @@ public class NutritionDatabase
             res.Add(f.food_description);
         
         return res;
+    }
+    public List<FoodDisplay> GetFood(string name, int limit)
+    {
+        List<FoodDisplay> foodlist = new List<FoodDisplay>();
+        if (name == "")
+            return foodlist;
 
+        List<Food> foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
+        foreach(Food f in foods) 
+            foodlist.Add(new FoodDisplay(f.food_description));
+
+        return foodlist;
     }
 
     public int GetClosestID(string s) 
@@ -46,8 +57,6 @@ public class NutritionDatabase
         List<Food> q = conn.Query<Food>(GetSQLQuery(s)).ToList();
         return q.First().food_description;
     }
-
-
 
     /* //////////////////////////////////////////////////////////////////
     /// Helper function: splits string (search bar) for database search
@@ -68,6 +77,17 @@ public class NutritionDatabase
         }
         return query + "LIMIT 5";
     }
-
+    private static string GetSQLQuery(string s, int limit)
+    {
+        string query = $"SELECT * FROM food WHERE";
+        string[] words = SplitSearchbar(s);
+        for (int i = 0; i < words.Length; i++)
+        {
+            if (i != 0)
+                query += " AND";
+            query += " food.food_description LIKE '%" + words[i] + "%'";
+        }
+        return query + "LIMIT " + limit;
+    }
 }
 

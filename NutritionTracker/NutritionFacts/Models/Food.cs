@@ -3,7 +3,7 @@
 namespace NutruitionTracker.NutritionFacts.Models;
 
 [Table("food")]
-class Food
+public class Food
 {
     [PrimaryKey]
     public int food_code { get; set; }

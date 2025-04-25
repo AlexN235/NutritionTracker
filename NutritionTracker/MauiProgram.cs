@@ -25,8 +25,18 @@ public static class MauiProgram
 		builder.Services.AddTransient<InputMealPage>();
 		builder.Services.AddTransient<InputMealViewModel>();
 
+        builder.Services.AddTransient<SearchFlyoutPage>();
+
+        builder.Services.AddTransient<FoodSearch>();
+		builder.Services.AddTransient<FoodSearchViewModel>();
+
+		builder.Services.AddTransient<FoodFacts>();
+		builder.Services.AddTransient<FoodFactsViewModel>();
+
+        
+
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
 		return builder.Build();

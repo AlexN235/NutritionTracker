@@ -8,23 +8,24 @@ namespace NutruitionTracker.ViewModel;
 public partial class MainViewModel : ObservableObject
 {
 
-    public MainViewModel()
+    public MainViewModel() 
     {
     }
 
     [ObservableProperty]
     public string text;
 
-    [RelayCommand]
-    void DoSomething()
-    {
-        Text = "it works";
-    }
 
     [RelayCommand]
     async Task GoToMeals(string s) 
     {
         await Shell.Current.GoToAsync(nameof(MyMeals));
+    }
+
+    [RelayCommand]
+    async Task GoToFoodSearch()
+    {
+        await Shell.Current.GoToAsync(nameof(SearchFlyoutPage));
     }
 
 }
