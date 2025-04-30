@@ -2,9 +2,11 @@ namespace NutruitionTracker;
 
 public partial class SearchFlyoutPage : FlyoutPage
 {
+	public FoodFacts foodsPage;
 	public SearchFlyoutPage()
     {
         InitializeComponent();
+        foodsPage = new FoodFacts();
         foodFlyoutPage.GetSelectionCollection().SelectionChanged += OnSelectionChanged;
     }
 
@@ -17,5 +19,5 @@ public partial class SearchFlyoutPage : FlyoutPage
 				IsPresented = false;
 		}
 		Detail = new NavigationPage(new FoodFacts(item.Name));
-	}
+    }
 }

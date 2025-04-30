@@ -4,7 +4,7 @@
             x:Class="NutruitionTracker.SearchFlyoutPage"
             xmlns:local="clr-namespace:NutruitionTracker"
             Title="SearchFlyoutPage"
-            FlyoutLayoutBehavior="Default">
+            FlyoutLayoutBehavior="Popover">
     <FlyoutPage.Flyout>
         <local:FoodSearch x:Name="foodFlyoutPage"/>
     </FlyoutPage.Flyout>

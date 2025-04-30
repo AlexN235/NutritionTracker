@@ -45,7 +45,7 @@ public class NutritionDatabase
 
     public int GetClosestID(string s) 
     {
-        if (s == "") return -1; /// Deal with error.
+        if (s == "") return 100; /// Deal with error.
 
         List<Food> q = conn.Query<Food>(GetSQLQuery(s)).ToList();
         return q.First().food_code;
@@ -89,5 +89,8 @@ public class NutritionDatabase
         }
         return query + "LIMIT " + limit;
     }
+
+
+
 }
 

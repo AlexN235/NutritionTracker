@@ -1,23 +1,26 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using NutruitionTracker.ViewModel;
+using System.Runtime.CompilerServices;
 
 namespace NutruitionTracker;
 
 public partial class FoodFacts : ContentPage
 {
-	string Name { get; set; }
-
+	FoodFactsViewModel vm;
 	public FoodFacts() 
 	{
 		InitializeComponent();
-		BindingContext = new FoodFactsViewModel();
+		vm = new FoodFactsViewModel();
+		BindingContext = vm;
+		head.Text = "Search to the top left.";
 	}
 
     public FoodFacts(string name)
     {
         InitializeComponent();
-        BindingContext = new FoodFactsViewModel();
-		Name = name;
+        vm = new FoodFactsViewModel();
+        BindingContext = new FoodFactsViewModel(name);
+        head.Text = name;
     }
 
     public FoodFacts(FoodFactsViewModel vm, string name)
