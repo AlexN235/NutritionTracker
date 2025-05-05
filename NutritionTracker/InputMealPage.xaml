@@ -64,14 +64,13 @@
         </Grid>
 
         <CollectionView
-             HorizontalOptions="Center"
-             BackgroundColor="Transparent"
-             ItemsSource="{Binding Ingredients}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="local:Ingredient">
+            HorizontalOptions="Center"
+            BackgroundColor="Transparent"
+            ItemsSource="{Binding Foods}">
+            <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="local:FoodItem">
                         <Grid ColumnDefinitions="0.5*, 0.5*, 0.25*">
-                            <Label Text="{Binding name}" Grid.Column="0" TextColor="Black" HorizontalOptions="Center"/>
-                            <Label Text="{Binding amount}" Grid.Column="1" TextColor="Black" HorizontalOptions="Center"/>
+                            <Label x:DataType="{x:Type x:String}" Text="{Binding Name}" Grid.Column="0" TextColor="Black" HorizontalOptions="Center"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

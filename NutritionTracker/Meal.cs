@@ -14,8 +14,7 @@ public class Meal
     private int fibre { get; set; }
     private int carbohydrates { get; set; }
     private int sugar { get; set; }
-    private int saturated_fat { get; set; }
-    private int unsaturated_fat { get; set; }
+    private int fat { get; set; }
 
     public Meal() { }
 
@@ -24,7 +23,7 @@ public class Meal
         return name;
     }
 
-    public Meal(String name, int totalWeight, int calories, int protein, int fibre, int carbohydrates, int sugar, int saturated_fat, int unsaturated_fat) 
+    public Meal(String name, int totalWeight, int calories, int protein, int fibre, int carbohydrates, int sugar, int fat) 
     {
         this.name = name;
         this.totalWeight = totalWeight;
@@ -33,10 +32,9 @@ public class Meal
         this.fibre = fibre;
         this.carbohydrates = carbohydrates;
         this.sugar = sugar;
-        this.saturated_fat = saturated_fat;
-        this.unsaturated_fat = unsaturated_fat;
+        this.fat = fat;
     }
-    public Meal(String name, int totalWeight, List<Ingredient> allIngredients, NutritionDatabase db)
+    public Meal(String name, int totalWeight)
     {
         this.name = name;
         this.totalWeight = totalWeight;
@@ -45,15 +43,13 @@ public class Meal
         this.fibre = 0;
         this.carbohydrates = 0;
         this.sugar = 0;
-        this.saturated_fat = 0;
-        this.unsaturated_fat = 0;
+        this.fat = 0;
+    }
 
-        foreach (Ingredient i in allIngredients)
-        {
-            List<FoodNutritionDetail> foodNutritionDetails = GetFoodNutritionDetails(i.database_food_id, db);
-            foreach (FoodNutritionDetail detail in foodNutritionDetails)
-                CheckAndAddNutrient(detail, i.amount);
-        }
+    public void AddToMeal(List<string> ingrediantNames, List<int> ingrediantValues, int amountMultiplier) 
+    {
+        for (int i = 0; i < ingrediantNames.Count; i++)
+            CheckAndAddNutrient(ingrediantNames[i], ingrediantValues[i] * amountMultiplier);
     }
 
     /* //////////////////////////////////////////////////////////////////////////////////////
@@ -79,28 +75,29 @@ public class Meal
             nutrient_name = x.nutrient_name
         }).ToList();
     }
-    private void CheckAndAddNutrient(FoodNutritionDetail detail, int amount)
+    private void CheckAndAddNutrient(string food_name, int amount)
     {
-        if (detail.nutrient_name == "CARBOHYDRATE, TOTAL (BY DIFFERENCE)")
-            this.carbohydrates += detail.nutrient_value * amount;
-        if (detail.nutrient_name == "SUGAR")
-            this.sugar += detail.nutrient_value * amount;
-        if (detail.nutrient_name == "SUCROSE")
-            this.sugar += detail.nutrient_value * amount;
-        if (detail.nutrient_name == "PROTIEN")
-            this.protein += detail.nutrient_value * amount;
-        if (detail.nutrient_name == "FIBRE, TOTAL DIETARY")
-            this.fibre += detail.nutrient_value * amount;
-        if (detail.nutrient_name == "ENERGY (KILOCALORIES)")
-            this.calories += detail.nutrient_value * amount;
-        if (detail.nutrient_name == "FATTY ACIDS, POLYUNSATURATED, TOTAL")
-            this.unsaturated_fat += detail.nutrient_value * amount;
-        if (detail.nutrient_name == "FATTY ACIDS, MONOUNSATURATED, TOTAL")
-            this.unsaturated_fat += detail.nutrient_value * amount;
-        if (detail.nutrient_name == "FATTY ACIDS, TRANS, TOTAL")
-            this.unsaturated_fat += detail.nutrient_value * amount;
-        if (detail.nutrient_name == "FATTY ACIDS, SATURATED, TOTAL")
-            this.saturated_fat += detail.nutrient_value * amount;
+        switch (food_name)
+        {
+            case "Protein":
+                this.protein += amount;
+                break;
+            case "Fat(total)":
+                this.fat += amount;
+                break;
+            case "Carbohydrate":
+                this.carbohydrates += amount;
+                break;
+            case "Energy(calories)":
+                this.calories += amount;
+                break;
+            case "Fibre":
+                this.fibre += amount;
+                break;
+            case "Sugars":
+                this.sugar += amount;
+                break;
+        }
     }
 }
 

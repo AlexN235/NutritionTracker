@@ -30,6 +30,7 @@ public class NutritionDatabase
         
         return res;
     }
+
     public List<FoodDisplay> GetFood(string name, int limit)
     {
         List<FoodDisplay> foodlist = new List<FoodDisplay>();
@@ -55,6 +56,13 @@ public class NutritionDatabase
         if (s == "") return ""; /// Deal with error.
 
         List<Food> q = conn.Query<Food>(GetSQLQuery(s)).ToList();
+        return q.First().food_description;
+    }
+
+    public string GetNameWithID(int id)
+    {
+
+        List<Food> q = conn.Query<Food>(GetSQLQueryWithID(id)).ToList();
         return q.First().food_description;
     }
 
@@ -90,7 +98,10 @@ public class NutritionDatabase
         return query + "LIMIT " + limit;
     }
 
-
+    private static string GetSQLQueryWithID(int id)
+    {
+        return $"SELECT * FROM food WHERE food.food_code = '" + id + "'";
+    }
 
 }
 

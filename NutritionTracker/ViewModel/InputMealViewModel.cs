@@ -14,7 +14,8 @@ public partial class InputMealViewModel : ObservableObject
     MyMealsViewModel myMealsVM;
     public InputMealViewModel(MyMealsViewModel myMealsVM)
     {
-        Ingredients = new ObservableCollection<Ingredient>();
+        foods = new ObservableCollection<FoodItem>();
+        foodsWeight = new List<int>();
         db = new NutritionDatabase();
         this.myMealsVM = myMealsVM;
     }
@@ -22,7 +23,9 @@ public partial class InputMealViewModel : ObservableObject
     public void breakpause() { return; }
 
     [ObservableProperty]
-    ObservableCollection<Ingredient> ingredients;
+    ObservableCollection<FoodItem> foods;
+    [ObservableProperty]
+    List<int> foodsWeight;
 
     [ObservableProperty]
     string ingrediantText;
@@ -55,9 +58,9 @@ public partial class InputMealViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(IngrediantText) || string.IsNullOrWhiteSpace(WeightText))
             return;
-
-        Ingredient newItem = new Ingredient(db.GetClosestName(IngrediantText), WeightText, db.GetClosestID(IngrediantText));
-        Ingredients.Add(newItem);
+        FoodItem newItem = new FoodItem(db.GetClosestName(IngrediantText));
+        foods.Add(newItem);
+        foodsWeight.Add(int.Parse(WeightText));
 
         IngrediantText = string.Empty;
         WeightText = string.Empty;
@@ -72,7 +75,13 @@ public partial class InputMealViewModel : ObservableObject
         {
             return;
         }
-        Meal newMeal = new Meal(this.MealName, Int32.Parse(this.MealWeight), this.ingredients.ToList(), db);
+
+        Meal newMeal = new Meal(this.MealName, Int32.Parse(this.MealWeight));
+        for (int i=0;i<foods.Count;i++)
+        {
+            FoodItem f = this.foods[i];
+            newMeal.AddToMeal(f.getItemNamesShort(), f.getItemValuesShort(), foodsWeight[i]);
+        }
         myMealsVM.AddMeal(newMeal);
         await Shell.Current.GoToAsync("..");
     }

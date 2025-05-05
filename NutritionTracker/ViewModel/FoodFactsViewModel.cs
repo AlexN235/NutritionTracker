@@ -32,13 +32,8 @@ public partial class FoodFactsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task GoBack() 
+    public async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
-    }
-
-    public void FillTable()
-    {
-        
     }
 }

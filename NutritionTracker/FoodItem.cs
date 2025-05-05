@@ -4,10 +4,12 @@ namespace NutruitionTracker;
 
 public class FoodItem
 {
+    public string Name { get; set; }
     private NutritionDatabase database;
     private Dictionary<string, string> dbNamesTranslation;
     private List<string> itemsNames;
     private int[] itemsValue;
+    private int[] shortListIndex;
 
     public FoodItem()
     {
@@ -15,6 +17,8 @@ public class FoodItem
         dbNamesTranslation = getDBToReadableDict();
         itemsNames = initializeItemNames();
         itemsValue = new int[itemsNames.Count];
+        shortListIndex = new[] {2, 7, 0, 6, 4, 1};
+        Name = "N/A";
     }
 
     public FoodItem(string query) 
@@ -23,17 +27,47 @@ public class FoodItem
         dbNamesTranslation = getDBToReadableDict();
         itemsNames = initializeItemNames();
         itemsValue = new int[itemsNames.Count];
+        shortListIndex = new[] { 2, 7, 0, 6, 4, 1 };
+        Name = database.GetClosestName(query);
 
         List<FoodNutritionDetail> foodNutritionDetails = GetFoodNutritionDetails(database.GetClosestID(query));
         foreach (FoodNutritionDetail detail in foodNutritionDetails)
             addData(detail);
     }
 
-    public FoodItem(int id) { }
+    public FoodItem(int id)
+    {
+        database = new NutritionDatabase();
+        dbNamesTranslation = getDBToReadableDict();
+        itemsNames = initializeItemNames();
+        itemsValue = new int[itemsNames.Count];
+        shortListIndex = new[] { 2, 7, 0, 6, 4, 1 };
+        Name = database.GetNameWithID(id);
+        
+        List<FoodNutritionDetail> foodNutritionDetails = GetFoodNutritionDetails(id);
+        foreach (FoodNutritionDetail detail in foodNutritionDetails)
+            addData(detail);
+    }
 
     public List<string> getItemsNames() { return itemsNames; }
 
     public List<int> getItemValues() { return itemsValue.ToList(); }
+
+    public List<string> getItemNamesShort() 
+    {
+        List<string> shortList = new List<string>();
+        foreach (int i in shortListIndex)
+            shortList.Add(itemsNames[i]);
+        return shortList; 
+    }
+
+    public List<int> getItemValuesShort()
+    {
+        List<int> shortList = new List<int>();
+        foreach (int i in shortListIndex)
+            shortList.Add(itemsValue[i]);
+        return shortList;
+    }
 
     private Dictionary<string, string> getDBToReadableDict()
     {
@@ -56,11 +90,11 @@ public class FoodItem
     private List<string> initializeItemNames() 
     {
         return new List<string> { "Protein", "Fat(total)", "Carbohydrate", "Alchohol", "Energy(calories)", "Energy(kJ)",
-                                        "Fibre", "Sugars",
-                                        "Calcium", "Iron", "Magnesium", "Phosphorus", "Potassium", "Sodium", "Zinc", "Copper", "Manganese",
-                                        "Vitamin B-6", "Vitamin B-12", "Vitamin C", "Vitamin D",
-                                        "Cholesterol", "Caffine"
-                                      };
+                                  "Fibre", "Sugars",
+                                  "Calcium", "Iron", "Magnesium", "Phosphorus", "Potassium", "Sodium", "Zinc", "Copper", "Manganese",
+                                  "Vitamin B-6", "Vitamin B-12", "Vitamin C", "Vitamin D",
+                                  "Cholesterol", "Caffine"
+                                };
     }
 
     private void addData(FoodNutritionDetail detail) 
