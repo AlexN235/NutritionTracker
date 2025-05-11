@@ -9,12 +9,12 @@ public class Meal
 {
     public String name { get; set; }
     public int totalWeight { get; set; }
-    private int calories { get; set; }
-    private int protein { get; set; }
-    private int fibre { get; set; }
-    private int carbohydrates { get; set; }
-    private int sugar { get; set; }
-    private int fat { get; set; }
+    private float calories { get; set; }
+    private float protein { get; set; }
+    private float fibre { get; set; }
+    private float carbohydrates { get; set; }
+    private float sugar { get; set; }
+    private float fat { get; set; }
 
     public Meal() { }
 
@@ -46,7 +46,7 @@ public class Meal
         this.fat = 0;
     }
 
-    public void AddToMeal(List<string> ingrediantNames, List<int> ingrediantValues, int amountMultiplier) 
+    public void AddToMeal(List<string> ingrediantNames, List<float> ingrediantValues, int amountMultiplier) 
     {
         for (int i = 0; i < ingrediantNames.Count; i++)
             CheckAndAddNutrient(ingrediantNames[i], ingrediantValues[i] * amountMultiplier);
@@ -75,7 +75,7 @@ public class Meal
             nutrient_name = x.nutrient_name
         }).ToList();
     }
-    private void CheckAndAddNutrient(string food_name, int amount)
+    private void CheckAndAddNutrient(string food_name, float amount)
     {
         switch (food_name)
         {

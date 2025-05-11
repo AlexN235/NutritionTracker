@@ -8,19 +8,22 @@
         <Grid ColumnDefinitions="0.1*, 0.1*, 0.1*, 0.7*">
             <Button Text="Back" Command="{Binding GoBackCommand}" HorizontalOptions="Start" Grid.Column="1"/>
         </Grid>
-        <Label x:Name="head" FontSize="Medium" TextColor="White" VerticalOptions="Fill" HorizontalOptions="Center"/>
-        <CollectionView ItemsSource="{Binding FoodList}" Grid.Column="0" ItemsLayout="VerticalList" HorizontalScrollBarVisibility="Always"
-                        HorizontalOptions="Fill" VerticalOptions="Fill" HeightRequest="550">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border Padding="10">
-                        <Grid ColumnDefinitions="0.5*, 0.5*">
-                            <Label Text="{Binding Name}" x:DataType="{x:Type x:String}" Grid.Column="0" FontAttributes="Bold"/>
-                            <Label Text="{Binding Value}" x:DataType="{x:Type x:Int32}" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Center"/>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <Label x:Name="head" FontAttributes="Bold" FontSize="Large" x:DataType="{x:Type x:String}" TextColor="White" VerticalOptions="Fill" HorizontalOptions="Center"/>
+        <Grid ColumnDefinitions="0.15*, 0.7*, 0.15*" RowDefinitions="auto, auto">
+            <Label Text="Nutrition Facts: Per 100 grams serving size."  FontSize="Small" TextColor="White" Grid.Column="1" Grid.Row="0" VerticalOptions="Fill" HorizontalOptions="Start"/>
+            <CollectionView ItemsSource="{Binding FoodList}" ItemsLayout="VerticalList" HorizontalScrollBarVisibility="Always"
+                            Grid.Column="1" Grid.Row="1" HorizontalOptions="Fill" VerticalOptions="Fill" HeightRequest="550">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="10">
+                            <Grid ColumnDefinitions="0.5*, 0.5*">
+                                <Label Text="{Binding Name}" x:DataType="{x:Type x:String}" Grid.Column="0" FontAttributes="Bold"/>
+                                <Label Text="{Binding Value}" x:DataType="{x:Type x:Int32}" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Center"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>

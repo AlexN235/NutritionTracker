@@ -8,7 +8,7 @@ public class FoodItem
     private NutritionDatabase database;
     private Dictionary<string, string> dbNamesTranslation;
     private List<string> itemsNames;
-    private int[] itemsValue;
+    private float[] itemsValue;
     private int[] shortListIndex;
 
     public FoodItem()
@@ -16,7 +16,7 @@ public class FoodItem
         database = new NutritionDatabase();
         dbNamesTranslation = getDBToReadableDict();
         itemsNames = initializeItemNames();
-        itemsValue = new int[itemsNames.Count];
+        itemsValue = new float[itemsNames.Count];
         shortListIndex = new[] {2, 7, 0, 6, 4, 1};
         Name = "N/A";
     }
@@ -26,7 +26,7 @@ public class FoodItem
         database = new NutritionDatabase();
         dbNamesTranslation = getDBToReadableDict();
         itemsNames = initializeItemNames();
-        itemsValue = new int[itemsNames.Count];
+        itemsValue = new float[itemsNames.Count];
         shortListIndex = new[] { 2, 7, 0, 6, 4, 1 };
         Name = database.GetClosestName(query);
 
@@ -40,7 +40,7 @@ public class FoodItem
         database = new NutritionDatabase();
         dbNamesTranslation = getDBToReadableDict();
         itemsNames = initializeItemNames();
-        itemsValue = new int[itemsNames.Count];
+        itemsValue = new float[itemsNames.Count];
         shortListIndex = new[] { 2, 7, 0, 6, 4, 1 };
         Name = database.GetNameWithID(id);
         
@@ -51,7 +51,7 @@ public class FoodItem
 
     public List<string> getItemsNames() { return itemsNames; }
 
-    public List<int> getItemValues() { return itemsValue.ToList(); }
+    public List<float> getItemValues() { return itemsValue.ToList(); }
 
     public List<string> getItemNamesShort() 
     {
@@ -61,9 +61,9 @@ public class FoodItem
         return shortList; 
     }
 
-    public List<int> getItemValuesShort()
+    public List<float> getItemValuesShort()
     {
-        List<int> shortList = new List<int>();
+        List<float> shortList = new List<float>();
         foreach (int i in shortListIndex)
             shortList.Add(itemsValue[i]);
         return shortList;
@@ -71,17 +71,17 @@ public class FoodItem
 
     private Dictionary<string, string> getDBToReadableDict()
     {
-        var keys = new List<string> { "PROTIEN", "FATTY ACIDS, POLYUNSATURATED, TOTAL", "FATTY ACIDS, MONOUNSATURATED, TOTAL", "FATTY ACIDS, TRANS, TOTAL" , "FATTY ACIDS, SATURATED, TOTAL", "CARBOHYDRATE, TOTAL (BY DIFFERENCE)", "ALCHOHOL", "ENERGY (KILOCALORIES)", "ENERGY(KILOJOULES)",
-                                      "FIBRE, TOTAL DIETARY", "SUGAR", "SUCROSE",
+        var keys = new List<string> { "PROTEIN", "FATTY ACIDS, POLYUNSATURATED, TOTAL", "FATTY ACIDS, MONOUNSATURATED, TOTAL", "FATTY ACIDS, TRANS, TOTAL" , "FATTY ACIDS, SATURATED, TOTAL", "CARBOHYDRATE, TOTAL (BY DIFFERENCE)", "ALCOHOL", "ENERGY (KILOCALORIES)", "ENERGY (KILOJOULES)",
+                                      "FIBRE, TOTAL DIETARY", "SUGARS, TOTAL", "SUCROSE",
                                       "CALCIUM", "IRON", "MAGNESIUM", "PHOSPHORUS", "POTASSIUM", "SODIUM", "ZINC", "COPPER", "MANGANESE",
-                                      "VITAMIN B-6", "VITAMIN B-12", "VITAMIN C", "VITAMIN D(D2 +D3)",
+                                      "VITAMIN B-6", "VITAMIN B-12", "VITAMIN C", "VITAMIN D (D2 + D3)",
                                       "CHOLESTEROL", "CAFFEINE"
                                     };
-        var values = new List<string> { "Protein", "Fat(total)", "Fat(total)", "Fat(total)", "Fat(total)", "Carbohydrate", "Alchohol", "Energy(calories)", "Energy(kJ)",
+        var values = new List<string> { "Protein", "Fat(total)", "Fat(total)", "Fat(total)", "Fat(total)", "Carbohydrate", "Alcohol", "Energy(calories)", "Energy(kJ)",
                                         "Fibre", "Sugars", "Sugars",
                                         "Calcium", "Iron", "Magnesium", "Phosphorus", "Potassium", "Sodium", "Zinc", "Copper", "Manganese",
                                         "Vitamin B-6", "Vitamin B-12", "Vitamin C", "Vitamin D",
-                                        "Cholesterol", "Caffine"
+                                        "Cholesterol", "Caffeine"
                                       };
 
         return keys.Zip(values, (k, v) => new { Key = k, Value = v }).ToDictionary(x => x.Key, x => x.Value);
@@ -89,11 +89,11 @@ public class FoodItem
 
     private List<string> initializeItemNames() 
     {
-        return new List<string> { "Protein", "Fat(total)", "Carbohydrate", "Alchohol", "Energy(calories)", "Energy(kJ)",
+        return new List<string> { "Protein", "Fat(total)", "Carbohydrate", "Alcohol", "Energy(calories)", "Energy(kJ)",
                                   "Fibre", "Sugars",
                                   "Calcium", "Iron", "Magnesium", "Phosphorus", "Potassium", "Sodium", "Zinc", "Copper", "Manganese",
                                   "Vitamin B-6", "Vitamin B-12", "Vitamin C", "Vitamin D",
-                                  "Cholesterol", "Caffine"
+                                  "Cholesterol", "Caffeine"
                                 };
     }
 
