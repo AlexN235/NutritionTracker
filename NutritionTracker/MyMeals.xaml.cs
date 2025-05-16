@@ -13,7 +13,7 @@ public partial class MyMeals : ContentPage
         VM = vm;
     }
 
-    public void AddMeal(Meal newMeal) 
+    public void AddMeal(FoodDisplay newMeal) 
     {
         VM.AddMeal(newMeal);
     }

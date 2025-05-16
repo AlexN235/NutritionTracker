@@ -60,6 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Meal.cs" />
 	  <Compile Remove="NewPage1.xaml.cs" />
 	</ItemGroup>
 

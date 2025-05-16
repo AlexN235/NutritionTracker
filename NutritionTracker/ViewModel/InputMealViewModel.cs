@@ -15,7 +15,7 @@ public partial class InputMealViewModel : ObservableObject
     public InputMealViewModel(MyMealsViewModel myMealsVM)
     {
         foods = new ObservableCollection<FoodItem>();
-        foodsWeight = new List<int>();
+        foodsWeight = new List<float>();
         db = new NutritionDatabase();
         this.myMealsVM = myMealsVM;
     }
@@ -25,7 +25,7 @@ public partial class InputMealViewModel : ObservableObject
     [ObservableProperty]
     ObservableCollection<FoodItem> foods;
     [ObservableProperty]
-    List<int> foodsWeight;
+    List<float> foodsWeight;
 
     [ObservableProperty]
     string ingrediantText;
@@ -60,7 +60,7 @@ public partial class InputMealViewModel : ObservableObject
             return;
         FoodItem newItem = new FoodItem(db.GetClosestName(IngrediantText));
         foods.Add(newItem);
-        foodsWeight.Add(int.Parse(WeightText));
+        foodsWeight.Add(float.Parse(WeightText));
 
         IngrediantText = string.Empty;
         WeightText = string.Empty;
@@ -76,12 +76,11 @@ public partial class InputMealViewModel : ObservableObject
             return;
         }
 
-        Meal newMeal = new Meal(this.MealName, Int32.Parse(this.MealWeight));
-        for (int i=0;i<foods.Count;i++)
-        {
-            FoodItem f = this.foods[i];
-            newMeal.AddToMeal(f.getItemNamesShort(), f.getItemValuesShort(), foodsWeight[i]);
-        }
+        // Add FoodItem using name and add to FoodDisplay with name, weight, FoodItem
+        FoodDisplay newMeal = new FoodDisplay(this.MealName, Int32.Parse(this.MealWeight));
+        FoodItem f = new FoodItem();
+        f.AddFoodsToFoodItem(foods.ToList(), foodsWeight);
+        newMeal.AddFoodItem(f);
         myMealsVM.AddMeal(newMeal);
         await Shell.Current.GoToAsync("..");
     }

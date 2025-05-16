@@ -8,7 +8,7 @@ namespace NutruitionTracker.ViewModel;
 public partial class MyMealsViewModel : ObservableObject
 {
     [ObservableProperty]
-    ObservableCollection<Meal> mealList = new ObservableCollection<Meal>();
+    ObservableCollection<FoodDisplay> mealList = new ObservableCollection<FoodDisplay>();
 
     private void breakpoint() { return; }
 
@@ -24,7 +24,7 @@ public partial class MyMealsViewModel : ObservableObject
         await Shell.Current.GoToAsync(nameof(InputMealPage));
     }
 
-    public void AddMeal(Meal newMeal) 
+    public void AddMeal(FoodDisplay newMeal) 
     {
         mealList.Add(newMeal);
     }

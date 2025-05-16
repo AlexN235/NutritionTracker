@@ -12,7 +12,18 @@ public class FoodDisplay
         Value = value;
     }
 
+    public FoodDisplay(string name, float value, FoodItem item) : this(name)
+    {
+        Value = value;
+        Item = item;
+    }
+
     public string Name { get; set; }
     public float Value { get; set; }
-    public Type TargeType { get; set; }
+    public FoodItem Item { get; set; }
+
+    public void AddFoodItem(FoodItem item) 
+    {
+        this.Item = item;
+    }
 }

@@ -69,6 +69,35 @@ public class FoodItem
         return shortList;
     }
 
+    public void AddFoodsToFoodItem(List<FoodItem> food_list, List<float> weights) 
+    {
+        float totalWeight = 0;
+        foreach (float f in weights)
+            totalWeight += f;
+        for (int i = 0; i < food_list.Count; i++)
+        {
+            AddFoodToFoodItem(food_list[i], weights[i], totalWeight);
+        }
+    }
+    public void AddFoodToFoodItem(FoodItem f, float weight, float totalWeight) 
+    {
+        int id = database.GetClosestID(f.Name);
+        AddFoodFromTable(id, weight, totalWeight);
+    }
+
+    public void AddFoodFromTable(int food_id) 
+    {
+        List<FoodNutritionDetail> foodNutritionDetails = GetFoodNutritionDetails(food_id);
+        foreach (FoodNutritionDetail detail in foodNutritionDetails)
+            addData(detail);
+    }
+    public void AddFoodFromTable(int food_id, float weight, float totalWeight)
+    {
+        List<FoodNutritionDetail> foodNutritionDetails = GetFoodNutritionDetails(food_id);
+        foreach (FoodNutritionDetail detail in foodNutritionDetails)
+            addData(detail, weight, totalWeight);
+    }
+
     private Dictionary<string, string> getDBToReadableDict()
     {
         var keys = new List<string> { "PROTEIN", "FATTY ACIDS, POLYUNSATURATED, TOTAL", "FATTY ACIDS, MONOUNSATURATED, TOTAL", "FATTY ACIDS, TRANS, TOTAL" , "FATTY ACIDS, SATURATED, TOTAL", "CARBOHYDRATE, TOTAL (BY DIFFERENCE)", "ALCOHOL", "ENERGY (KILOCALORIES)", "ENERGY (KILOJOULES)",
@@ -105,6 +134,16 @@ public class FoodItem
 
         int index = itemsNames.IndexOf(name);
         itemsValue[index] += detail.nutrient_value;
+    }
+
+    private void addData(FoodNutritionDetail detail, float weight, float totalWeight)
+    {
+        if (!dbNamesTranslation.ContainsKey(detail.nutrient_name))
+            return;
+        string name = dbNamesTranslation[detail.nutrient_name];
+
+        int index = itemsNames.IndexOf(name);
+        itemsValue[index] += detail.nutrient_value * weight / totalWeight;
     }
     private List<FoodNutritionDetail> GetFoodNutritionDetails(int food_id)
     {

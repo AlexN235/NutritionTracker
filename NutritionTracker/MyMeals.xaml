@@ -32,7 +32,6 @@
             HorizontalOptions="Center"/>
 
         <CollectionView Grid.Row="2" Grid.Column="1" ItemsLayout="VerticalGrid" SelectionMode="Single" BackgroundColor="Transparent" ItemsSource="{Binding MealList}" EmptyView="No Data">
-           
             <CollectionView.Header>
                 <Grid ColumnDefinitions="0.75*, 0.25*">
                     <Label Text="Meals" HorizontalOptions="Center" Grid.Column="0"/>
@@ -45,11 +44,11 @@
             </CollectionView.Footer>
             
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="local:Meal">
+                <DataTemplate x:DataType="local:FoodDisplay">
                     <Border BackgroundColor="Transparent" Margin="10">
                         <Grid ColumnDefinitions="0.75*, 0.25*"  BackgroundColor="Transparent" Padding="5">
-                            <Label HorizontalOptions="Center" Text="{Binding name}" TextColor="Black" Grid.Column="0"/>
-                            <Label HorizontalOptions="Center" Text="{Binding totalWeight}" TextColor="Red" Grid.Column="1"/>
+                            <Label HorizontalOptions="Center" Text="{Binding Name}" TextColor="Black" Grid.Column="0"/>
+                            <Label HorizontalOptions="Center" Text="{Binding Value}" TextColor="Red" Grid.Column="1"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
