@@ -2,16 +2,15 @@
 
 namespace NutruitionTracker;
 
-public class FoodItem : EdibleItem
+public class MealItem : FoodItem
 {
     public string Name { get; set; }
     public NutritionDatabase database { get; set; }
     public Dictionary<string, string> dbNamesTranslation { get; set; }
     public List<string> itemsNames { get; set; }
-    public float[] itemsValue { get; set; } 
+    public float[] itemsValue { get; set; }
 
-    public FoodItem()
-    {
+    public MealItem() {
         database = new NutritionDatabase();
         dbNamesTranslation = getDBToReadableDict();
         itemsNames = initializeItemNames();
@@ -19,32 +18,25 @@ public class FoodItem : EdibleItem
         Name = "N/A";
     }
 
-    public FoodItem(string query) 
+    public void AddFoodsToFoodItem(List<FoodItem> food_list, List<float> weights)
     {
-        database = new NutritionDatabase();
-        dbNamesTranslation = getDBToReadableDict();
-        itemsNames = initializeItemNames();
-        itemsValue = new float[itemsNames.Count];
-        Name = database.GetClosestName(query);
-
-        List<FoodNutritionDetail> foodNutritionDetails = GetFoodNutritionDetails(database.GetClosestID(query));
-        foreach (FoodNutritionDetail detail in foodNutritionDetails)
-            addData(detail);
+        for (int i = 0; i < food_list.Count; i++)
+        {
+            AddFoodToFoodItem(food_list[i], weights[i]);
+        }
+    }
+    private void AddFoodToFoodItem(FoodItem f, float weight)
+    {
+        int id = database.GetClosestID(f.Name);
+        AddFoodFromTable(id, weight);
     }
 
-    public FoodItem(int id)
+    private void AddFoodFromTable(int food_id, float weight)
     {
-        database = new NutritionDatabase();
-        dbNamesTranslation = getDBToReadableDict();
-        itemsNames = initializeItemNames();
-        itemsValue = new float[itemsNames.Count];
-        Name = database.GetNameWithID(id);
-        
-        List<FoodNutritionDetail> foodNutritionDetails = GetFoodNutritionDetails(id);
+        List<FoodNutritionDetail> foodNutritionDetails = GetFoodNutritionDetails(food_id);
         foreach (FoodNutritionDetail detail in foodNutritionDetails)
-            addData(detail);
+            addData(detail, weight);
     }
-
     private Dictionary<string, string> getDBToReadableDict()
     {
         var keys = new List<string> { "PROTEIN", "FATTY ACIDS, POLYUNSATURATED, TOTAL", "FATTY ACIDS, MONOUNSATURATED, TOTAL", "FATTY ACIDS, TRANS, TOTAL" , "FATTY ACIDS, SATURATED, TOTAL", "CARBOHYDRATE, TOTAL (BY DIFFERENCE)", "ALCOHOL", "ENERGY (KILOCALORIES)", "ENERGY (KILOJOULES)",
@@ -62,8 +54,7 @@ public class FoodItem : EdibleItem
 
         return keys.Zip(values, (k, v) => new { Key = k, Value = v }).ToDictionary(x => x.Key, x => x.Value);
     }
-
-    private List<string> initializeItemNames() 
+    private List<string> initializeItemNames()
     {
         return new List<string> { "Protein", "Fat(total)", "Carbohydrate", "Alcohol", "Energy(calories)", "Energy(kJ)",
                                   "Fibre", "Sugars",
@@ -72,17 +63,15 @@ public class FoodItem : EdibleItem
                                   "Cholesterol", "Caffeine"
                                 };
     }
-
-    private void addData(FoodNutritionDetail detail) 
+    private void addData(FoodNutritionDetail detail, float weight)
     {
         if (!dbNamesTranslation.ContainsKey(detail.nutrient_name))
             return;
         string name = dbNamesTranslation[detail.nutrient_name];
 
         int index = itemsNames.IndexOf(name);
-        itemsValue[index] += detail.nutrient_value;
+        itemsValue[index] += detail.nutrient_value * weight / 100;
     }
-
     private List<FoodNutritionDetail> GetFoodNutritionDetails(int food_id)
     {
         // Grab Query
@@ -104,39 +93,3 @@ public class FoodItem : EdibleItem
         }).ToList();
     }
 }
-
-/* Proxiamtes:
-    * Protein
-    * Total Fat
-    * Carbohydrate
-    * Alchohol
-    * Energy (kcal)
-    * Energy (kj)
-    * 
-    * Other Carbohydates:
-    * Fibre
-    * Sugar
-    * 
-* Minerals:
-    * Calcium, Ca
-    * Iron, Fe
-    * Magnesium, Mg
-    * Phosphorus, P
-    * Potassium, K
-    * Zinc, Zn
-    * Copper, Cu
-    * Manganese, Mn
-    * Selenium, Se
-    * 
-* Vitamins:
-    * Vitamin B-6
-    * Vitamin B-12
-    * Vitamin C
-    * Vitamin D
-    * Vitamin D (IU)
-    * 
-* Fats:
-    * 
-* Others:
-    * Caffeine
-    */

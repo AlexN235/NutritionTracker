@@ -20,9 +20,9 @@ public class FoodDisplay
 
     public string Name { get; set; }
     public float Value { get; set; }
-    public FoodItem Item { get; set; }
+    public EdibleItem Item { get; set; }
 
-    public void AddFoodItem(FoodItem item) 
+    public void AddFoodItem(EdibleItem item) 
     {
         this.Item = item;
     }

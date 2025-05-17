@@ -21,8 +21,8 @@ public partial class FoodFactsViewModel : ObservableObject
         this.name = name;
 
         FoodItem f = new FoodItem(name);
-        List<string> names = f.getItemsNames();
-        List<float> values = f.getItemValues();
+        List<string> names = f.itemsNames;
+        List<float> values = f.itemsValue.ToList();
 
         List<FoodDisplay> temp = new List<FoodDisplay>();
         for (int i = 0; i < names.Count; i++)

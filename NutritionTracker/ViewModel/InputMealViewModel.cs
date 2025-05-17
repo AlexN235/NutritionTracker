@@ -14,8 +14,7 @@ public partial class InputMealViewModel : ObservableObject
     MyMealsViewModel myMealsVM;
     public InputMealViewModel(MyMealsViewModel myMealsVM)
     {
-        foods = new ObservableCollection<FoodItem>();
-        foodsWeight = new List<float>();
+        foods = new ObservableCollection<FoodDisplay>();
         db = new NutritionDatabase();
         this.myMealsVM = myMealsVM;
     }
@@ -23,20 +22,13 @@ public partial class InputMealViewModel : ObservableObject
     public void breakpause() { return; }
 
     [ObservableProperty]
-    ObservableCollection<FoodItem> foods;
-    [ObservableProperty]
-    List<float> foodsWeight;
-
+    ObservableCollection<FoodDisplay> foods;
     [ObservableProperty]
     string ingrediantText;
     [ObservableProperty]
     string weightText;
-
     [ObservableProperty]
     string mealName;
-    [ObservableProperty]
-    string mealWeight;
-
     [ObservableProperty]
     private string query;
     [ObservableProperty]
@@ -53,33 +45,42 @@ public partial class InputMealViewModel : ObservableObject
         await Shell.Current.GoToAsync("..");
     }
 
+    // Add to list of ingrediants in the meal.
     [RelayCommand]
     void Add() 
     {
         if (string.IsNullOrWhiteSpace(IngrediantText) || string.IsNullOrWhiteSpace(WeightText))
             return;
-        FoodItem newItem = new FoodItem(db.GetClosestName(IngrediantText));
-        foods.Add(newItem);
-        foodsWeight.Add(float.Parse(WeightText));
+        string name = db.GetClosestName(IngrediantText);
+        FoodItem newItem = new FoodItem(name);
+        FoodDisplay display = new FoodDisplay(name, float.Parse(WeightText), newItem);
+        foods.Add(display);
 
         IngrediantText = string.Empty;
         WeightText = string.Empty;
     }
 
+    // Finish creating a meal and returning to Meals page with the newly added entry.
     [RelayCommand]
     async Task AddMeal()
     {
-        if (string.IsNullOrWhiteSpace(MealName) || string.IsNullOrWhiteSpace(MealWeight))
+        if (string.IsNullOrWhiteSpace(MealName))
             return;
-        if (!Regex.Match(MealWeight, "^[0-9]+$").Success) 
-        {
-            return;
-        }
+        
+        // Create new meal to send back to Meal page.
+        FoodDisplay newMeal = new FoodDisplay(this.MealName);
+        MealItem f = new MealItem();
 
-        // Add FoodItem using name and add to FoodDisplay with name, weight, FoodItem
-        FoodDisplay newMeal = new FoodDisplay(this.MealName, Int32.Parse(this.MealWeight));
-        FoodItem f = new FoodItem();
-        f.AddFoodsToFoodItem(foods.ToList(), foodsWeight);
+        // Create list of foods and their weights to combine into the meal.
+        List<FoodItem> food_list = new List<FoodItem>();
+        List<float> weight_list = new List<float>();
+        foreach (FoodDisplay food in foods) { 
+            food_list.Add((FoodItem)food.Item);
+            weight_list.Add(food.Value);
+        }
+        f.AddFoodsToFoodItem(food_list, weight_list);
+
+        // Send meal to MealsViewModel and return to Meals Page.
         newMeal.AddFoodItem(f);
         myMealsVM.AddMeal(newMeal);
         await Shell.Current.GoToAsync("..");
@@ -89,4 +90,6 @@ public partial class InputMealViewModel : ObservableObject
     {
         return db.GetFoodName(s);
     }
+
+
 }

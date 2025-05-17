@@ -26,4 +26,9 @@ public partial class InputMealPage : ContentPage
         searchResults.ItemsSource = f;
     }
 
+    void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e) {
+        string select = (e.CurrentSelection.FirstOrDefault() as String);
+        searchBar.Text = select;
+    }
+
 }
