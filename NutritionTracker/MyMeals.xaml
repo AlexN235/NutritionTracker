@@ -7,61 +7,39 @@
              xmlns:local="clr-namespace:NutruitionTracker"
              Title="MyMeals">
 
-    <Grid
-        Padding="20"
-        BackgroundColor="White"
-        RowSpacing="10"
-        ColumnSpacing="10"
-        RowDefinitions="auto, auto, auto, auto"
-        ColumnDefinitions="100, *, 100">
+    <Grid RowDefinitions="45, 1*" Padding="5" BackgroundColor="White">
+        <Button Text="Back" FontSize="Small" Command="{Binding GoBackCommand}"
+                Grid.Row="0" HorizontalOptions="Start"/>
+        <Grid RowDefinitions="auto, 0.5*, 45"
+              Grid.Row="1" BackgroundColor="White" RowSpacing="10" ColumnSpacing="10" Padding="20">
+            <Label Text="Meals!" TextColor="Black" FontSize="Medium"
+                   Grid.Row="0" HorizontalOptions="Center"/>
 
-        <Button 
-            Text="Back"
-            Command="{Binding GoBackCommand}"
-            FontSize="20"
-            Grid.Row="0"
-            Grid.Column="0"
-            HorizontalOptions="Start"/>
+            <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Always">
+                <CollectionView ItemsSource="{Binding MealList}" SelectionMode="Single" BackgroundColor="Transparent" IsGrouped="True">
+                    <CollectionView.Footer>
+                        <Label Text="End of list." HorizontalOptions="Center"/>
+                    </CollectionView.Footer>
 
-        <Label 
-            Text="Meals!"
-            TextColor="Black"
-            FontSize="25"
-            Grid.Row="1"
-            Grid.Column="1"
-            HorizontalOptions="Center"/>
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate x:DataType="local:FoodDisplayGroup">
+                            <Label Text="{Binding Name}" TextColor="Grey" FontSize="Small"/>
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
 
-        <CollectionView Grid.Row="2" Grid.Column="1" ItemsLayout="VerticalGrid" SelectionMode="Single" BackgroundColor="Transparent" ItemsSource="{Binding MealList}" EmptyView="No Data">
-            <CollectionView.Header>
-                <Grid ColumnDefinitions="0.75*, 0.25*">
-                    <Label Text="Meals" HorizontalOptions="Center" Grid.Column="0"/>
-                    <Label Text="g" HorizontalOptions="Center" Grid.Column="1"/>
-                </Grid>
-            </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="local:FoodDisplay">
+                            <Grid ColumnDefinitions="0.1*, 0.9*">
+                                <Label HorizontalOptions="Start" Text="{Binding Name}" TextColor="Black" Grid.Column="1"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
             
-            <CollectionView.Footer>
-                <Label Text="End of list." HorizontalOptions="Center"/>
-            </CollectionView.Footer>
-            
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="local:FoodDisplay">
-                    <Border BackgroundColor="Transparent" Margin="10">
-                        <Grid ColumnDefinitions="0.75*, 0.25*"  BackgroundColor="Transparent" Padding="5">
-                            <Label HorizontalOptions="Center" Text="{Binding Name}" TextColor="Black" Grid.Column="0"/>
-                            <Label HorizontalOptions="Center" Text="{Binding Value}" TextColor="Red" Grid.Column="1"/>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-        <Button
-            Text="Add Meal"
-            FontSize="20"
-            Padding="10"
-            Grid.Row="4"
-            Grid.Column="1"
-            Command="{Binding AddMealCommand}"/>
-
+            <Button Text="Add Meal" Grid.Row="2" Command="{Binding AddMealCommand}" 
+                    FontSize="Small" Padding="10" VerticalOptions="End"/>
+        </Grid>
     </Grid>
+    
 </ContentPage>

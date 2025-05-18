@@ -2,13 +2,14 @@
 
 namespace NutruitionTracker;
 
-public class MealItem : FoodItem
+public class MealItem : EdibleItem
 {
     public string Name { get; set; }
     public NutritionDatabase database { get; set; }
     public Dictionary<string, string> dbNamesTranslation { get; set; }
     public List<string> itemsNames { get; set; }
     public float[] itemsValue { get; set; }
+    public DateTime Date { get; set; }
 
     public MealItem() {
         database = new NutritionDatabase();
@@ -16,6 +17,7 @@ public class MealItem : FoodItem
         itemsNames = initializeItemNames();
         itemsValue = new float[itemsNames.Count];
         Name = "N/A";
+        Date = DateTime.Today;
     }
 
     public void AddFoodsToFoodItem(List<FoodItem> food_list, List<float> weights)
@@ -25,6 +27,11 @@ public class MealItem : FoodItem
             AddFoodToFoodItem(food_list[i], weights[i]);
         }
     }
+
+    public void updateDate() { 
+        Date = DateTime.Today;
+    }
+
     private void AddFoodToFoodItem(FoodItem f, float weight)
     {
         int id = database.GetClosestID(f.Name);

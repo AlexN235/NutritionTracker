@@ -8,9 +8,12 @@ namespace NutruitionTracker.ViewModel;
 public partial class MyMealsViewModel : ObservableObject
 {
     [ObservableProperty]
-    ObservableCollection<FoodDisplay> mealList = new ObservableCollection<FoodDisplay>();
+    ObservableCollection<FoodDisplayGroup> mealList;
 
-    private void breakpoint() { return; }
+    public MyMealsViewModel() 
+    {
+        mealList = new ObservableCollection<FoodDisplayGroup>();
+    }
 
     [RelayCommand]
     async Task GoBack() 
@@ -26,7 +29,22 @@ public partial class MyMealsViewModel : ObservableObject
 
     public void AddMeal(FoodDisplay newMeal) 
     {
-        mealList.Add(newMeal);
+        DateTime date = newMeal.GetDate();
+        var group = mealList.Where(x => x.Name == date.ToString("d"));
+        if (group.Any())
+        {
+            //List<FoodDisplay> temp = group.First();
+            //temp.Add(newMeal);
+            //mealList.Add(new FoodDisplayGroup(date.ToString("d"), temp));
+            mealList.First(x => x.Name == date.ToString("d")).AddToList(newMeal);
+        }
+        else 
+        {
+            List<FoodDisplay> temp = new List<FoodDisplay>();
+            temp.Add(newMeal);
+            mealList.Add(new FoodDisplayGroup(date.ToString("d"), temp));
+        }
+
     }
 
 }

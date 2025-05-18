@@ -12,7 +12,7 @@ public class FoodDisplay
         Value = value;
     }
 
-    public FoodDisplay(string name, float value, FoodItem item) : this(name)
+    public FoodDisplay(string name, float value, EdibleItem item) : this(name)
     {
         Value = value;
         Item = item;
@@ -25,5 +25,12 @@ public class FoodDisplay
     public void AddFoodItem(EdibleItem item) 
     {
         this.Item = item;
+    }
+
+    public DateTime GetDate() 
+    {
+        if (Item.GetType() == typeof(MealItem))
+            return ((MealItem)Item).Date;
+        return DateTime.Now;
     }
 }
