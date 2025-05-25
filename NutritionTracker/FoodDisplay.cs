@@ -1,6 +1,6 @@
 ﻿namespace NutruitionTracker;
 
-public class FoodDisplay
+public class FoodDisplay : IEquatable<FoodDisplay>
 {
     public FoodDisplay(string name)
     {
@@ -32,5 +32,10 @@ public class FoodDisplay
         if (Item.GetType() == typeof(MealItem))
             return ((MealItem)Item).Date;
         return DateTime.Now;
+    }
+
+    public bool Equals(FoodDisplay other) 
+    {
+        return this.Name == other.Name && this.Item.Equals(other.Item);
     }
 }

@@ -10,16 +10,14 @@ namespace NutruitionTracker.ViewModel;
 
 public partial class InputMealViewModel : ObservableObject
 {
-    NutritionDatabase db;
-    MyMealsViewModel myMealsVM;
+    private NutritionDatabase db;
+    private MyMealsViewModel myMealsVM;
     public InputMealViewModel(MyMealsViewModel myMealsVM)
     {
         foods = new ObservableCollection<FoodDisplay>();
         db = new NutritionDatabase();
         this.myMealsVM = myMealsVM;
     }
-
-    public void breakpause() { return; }
 
     [ObservableProperty]
     ObservableCollection<FoodDisplay> foods;

@@ -12,11 +12,11 @@
                 Grid.Row="0" HorizontalOptions="Start"/>
         <Grid RowDefinitions="auto, 0.5*, 45"
               Grid.Row="1" BackgroundColor="White" RowSpacing="10" ColumnSpacing="10" Padding="20">
-            <Label Text="Meals!" TextColor="Black" FontSize="Medium"
+            <Label Text="Meal Records!" TextColor="Black" FontSize="Medium"
                    Grid.Row="0" HorizontalOptions="Center"/>
-
             <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Always">
-                <CollectionView ItemsSource="{Binding MealList}" SelectionMode="Single" BackgroundColor="Transparent" IsGrouped="True">
+                <CollectionView ItemsSource="{Binding MealList}" BackgroundColor="Transparent" IsGrouped="True"
+                                SelectionMode="Single" SelectionChanged="OnSelectionChange">
                     <CollectionView.Footer>
                         <Label Text="End of list." HorizontalOptions="Center"/>
                     </CollectionView.Footer>
@@ -29,9 +29,11 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="local:FoodDisplay">
-                            <Grid ColumnDefinitions="0.1*, 0.9*">
-                                <Label HorizontalOptions="Start" Text="{Binding Name}" TextColor="Black" Grid.Column="1"/>
-                            </Grid>
+                            <ScrollView VerticalScrollBarVisibility="Always">
+                                <Grid ColumnDefinitions="0.1*, 0.9*" Padding="5">
+                                    <Label HorizontalOptions="Start" x:DataType="{x:Type x:String}" Text="{Binding Name}" TextColor="Black" Grid.Column="1"/>
+                                </Grid>
+                            </ScrollView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

@@ -2,7 +2,7 @@
 
 namespace NutruitionTracker;
 
-public class MealItem : EdibleItem
+public class MealItem : EdibleItem, IEquatable<MealItem>
 {
     public string Name { get; set; }
     public NutritionDatabase database { get; set; }
@@ -30,6 +30,26 @@ public class MealItem : EdibleItem
 
     public void updateDate() { 
         Date = DateTime.Today;
+    }
+
+    public bool Equals(MealItem? other)
+    {
+        if (other == null) return false;
+        int count = this.itemsValue.Count();
+        if (other.itemsValue.Count() != count)
+            return false;
+        for (int i = 0; i < count; i++)
+        {
+            if (!compareFloatEqual(this.itemsValue.ElementAt(i), other.itemsValue.ElementAt(i)))
+                return false;
+        }
+        return true;
+    }
+
+    private bool compareFloatEqual(float one, float two)
+    {
+        bool test = (Math.Abs(one - two) < 0.001);
+        return test;
     }
 
     private void AddFoodToFoodItem(FoodItem f, float weight)

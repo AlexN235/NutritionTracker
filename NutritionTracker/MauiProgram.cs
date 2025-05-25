@@ -33,7 +33,10 @@ public static class MauiProgram
 		builder.Services.AddTransient<FoodFacts>();
 		builder.Services.AddTransient<FoodFactsViewModel>();
 
-        
+        builder.Services.AddTransient<DisplayDetailPage>();
+        builder.Services.AddTransient<DisplayDetailViewModel>();
+
+
 
 #if DEBUG
         builder.Logging.AddDebug();

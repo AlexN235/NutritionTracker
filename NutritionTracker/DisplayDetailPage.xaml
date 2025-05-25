@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NutruitionTracker.DisplayDetailPage"
+             xmlns:viewmodel="clr-namespace:NutruitionTracker.ViewModel"
+             x:DataType="viewmodel:DisplayDetailViewModel"
+             Title="DisplayDetailPage"
+             BackgroundColor="White">
+    <Grid RowDefinitions="auto, 0.9*, 50" Padding="10" RowSpacing="20" >
+        <Label Text="Temp Title" Grid.Row="0" FontSize="Title" TextColor="Black"/>
+        <ScrollView VerticalScrollBarVisibility="Always" Grid.Row="1" Padding="7">
+            <CollectionView ItemsSource="{Binding Food}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 0, 10, 10, 0" StrokeThickness="2" Padding="20, 0">
+                            <Border.Stroke>
+                                <LinearGradientBrush EndPoint="0,1">
+                                    <GradientStop Color="Orange" Offset="0.1"/>
+                                    <GradientStop Color="Red" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </Border.Stroke>
+                            <Grid ColumnDefinitions="0.5*, 0.5*" Padding="10">
+                                <Label Text="{Binding Name}" TextColor="Black" x:DataType="{x:Type x:String}" Grid.Column="0"/>
+                                <Label Text="{Binding Value}" TextColor="Black" x:DataType="{x:Type x:Double}" Grid.Column="1" HorizontalOptions="End"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+    </ScrollView>
+        <Grid Grid.Row="2" ColumnDefinitions="0.5*, 0.5*">
+            <Button Text="Back" Command="{Binding BackCommand}" Grid.Column="0" HorizontalOptions="Center" WidthRequest="160"/>
+            <Button Text="Delete"  Command="{Binding DeleteCommand}" Grid.Column="1" HorizontalOptions="Center" WidthRequest="160" BackgroundColor="Red"/>
+        </Grid>
+    </Grid>
+</ContentPage>

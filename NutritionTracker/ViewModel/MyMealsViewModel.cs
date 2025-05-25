@@ -2,13 +2,15 @@
 using CommunityToolkit.Mvvm.Input;
 using NutruitionTracker.NutritionFacts;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NutruitionTracker.ViewModel;
 
 public partial class MyMealsViewModel : ObservableObject
 {
     [ObservableProperty]
-    ObservableCollection<FoodDisplayGroup> mealList;
+    private ObservableCollection<FoodDisplayGroup> mealList;
 
     public MyMealsViewModel() 
     {
@@ -27,25 +29,39 @@ public partial class MyMealsViewModel : ObservableObject
         await Shell.Current.GoToAsync(nameof(InputMealPage));
     }
 
+    public async Task GoToDetails(FoodDisplay f)
+    {
+        await Shell.Current.GoToAsync(nameof(DisplayDetailPage), new Dictionary<string, object>
+        {
+            ["foodID"] = f
+        });
+    }
+    public void Delete(FoodDisplay f) 
+    {
+        foreach (FoodDisplayGroup group in mealList) 
+        {
+            for (int i = 0; i < group.Count; i++)
+            {
+                if (group[i].Equals(f)) {
+                    group.RemoveAt(i);
+                }
+            }
+        } 
+    }
+
     public void AddMeal(FoodDisplay newMeal) 
     {
         DateTime date = newMeal.GetDate();
         var group = mealList.Where(x => x.Name == date.ToString("d"));
         if (group.Any())
         {
-            //List<FoodDisplay> temp = group.First();
-            //temp.Add(newMeal);
-            //mealList.Add(new FoodDisplayGroup(date.ToString("d"), temp));
             mealList.First(x => x.Name == date.ToString("d")).AddToList(newMeal);
         }
         else 
         {
-            List<FoodDisplay> temp = new List<FoodDisplay>();
-            temp.Add(newMeal);
+            List<FoodDisplay> temp = [newMeal];
             mealList.Add(new FoodDisplayGroup(date.ToString("d"), temp));
         }
-
     }
-
 }
 

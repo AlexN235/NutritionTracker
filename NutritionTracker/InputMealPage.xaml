@@ -32,21 +32,23 @@
 
         <Border Grid.Row="2" StrokeThickness="1" Stroke="Black" >
             <Grid BackgroundColor="Transparent">
-                <Grid VerticalOptions="Start" RowDefinitions="auto, auto, auto" ColumnDefinitions="0.5*, 0.5*" Padding="10" ColumnSpacing="10">
+                <Grid VerticalOptions="Start" RowDefinitions="20, 1*, 55" ColumnDefinitions="0.5*, 0.5*" Padding="10" ColumnSpacing="10">
                     <Label Text="Ingredients" HorizontalOptions="Center" TextColor="Black" Grid.Row="0" Grid.Column="0"/>
                     <Label Text="g" HorizontalOptions="Center"  TextColor="Black" Grid.Row="0" Grid.Column="1"/>
-                    <CollectionView ItemsSource="{Binding Foods}" HorizontalOptions="Center" Grid.Row="1" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Always">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="local:FoodDisplay">
-                                <Border Padding="5"> 
-                                    <Grid ColumnDefinitions="0.5*, 0.5*" BackgroundColor="AliceBlue">
-                                        <Label x:DataType="{x:Type x:String}" Text="{Binding Name}" TextColor="Black" Grid.Column="0" HorizontalOptions="Center" />
-                                        <Label x:DataType="{x:Type x:Double}" Text="{Binding Value}" TextColor="Black" Grid.Column="1" HorizontalOptions="Center"/>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                    <ScrollView Grid.Row="1" Grid.ColumnSpan="2">
+                        <CollectionView ItemsSource="{Binding Foods}" HorizontalOptions="Center" VerticalScrollBarVisibility="Always">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="local:FoodDisplay">
+                                    <Border Padding="5">
+                                        <Grid ColumnDefinitions="0.5*, 0.5*" BackgroundColor="AliceBlue">
+                                            <Label x:DataType="{x:Type x:String}" Text="{Binding Name}" TextColor="Black" Grid.Column="0" HorizontalOptions="Center" />
+                                            <Label x:DataType="{x:Type x:Double}" Text="{Binding Value}" TextColor="Black" Grid.Column="1" HorizontalOptions="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
                 </Grid>
                 <Grid VerticalOptions="End" ColumnDefinitions="4*, 1*" Padding="10" ColumnSpacing="10" BackgroundColor="LightBlue">
                     <Entry Placeholder="Input name of the meal and press Okay to finish." VerticalOptions="Fill" Text="{Binding MealName}" BackgroundColor="LightGray" Grid.Row="2" Grid.Column="0"/>
