@@ -7,10 +7,12 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NutruitionTracker.ViewModel;
 
-public partial class MyMealsViewModel : ObservableObject
+public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
     private ObservableCollection<FoodDisplayGroup> mealList;
+    [ObservableProperty]
+    private FoodDisplay selectedItem;
 
     public MyMealsViewModel() 
     {
@@ -29,14 +31,16 @@ public partial class MyMealsViewModel : ObservableObject
         await Shell.Current.GoToAsync(nameof(InputMealPage));
     }
 
-    public async Task GoToDetails(FoodDisplay f)
+    [RelayCommand]
+    async Task OnSelectionGetDetails() 
     {
         await Shell.Current.GoToAsync(nameof(DisplayDetailPage), new Dictionary<string, object>
         {
-            ["foodID"] = f
+            ["foodID"] = selectedItem
         });
     }
-    public void Delete(FoodDisplay f) 
+
+    private void DeleteMeal(FoodDisplay f) 
     {
         foreach (FoodDisplayGroup group in mealList) 
         {
@@ -49,7 +53,7 @@ public partial class MyMealsViewModel : ObservableObject
         } 
     }
 
-    public void AddMeal(FoodDisplay newMeal) 
+    private void AddMeal(FoodDisplay newMeal) 
     {
         DateTime date = newMeal.GetDate();
         var group = mealList.Where(x => x.Name == date.ToString("d"));
@@ -63,5 +67,22 @@ public partial class MyMealsViewModel : ObservableObject
             mealList.Add(new FoodDisplayGroup(date.ToString("d"), temp));
         }
     }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.Count == 0) 
+        {
+            return;
+        }
+        else if (query.ContainsKey("toDelete"))
+        {
+            this.DeleteMeal(query["toDelete"] as FoodDisplay);
+        }
+        else if (query.ContainsKey("Meal") != null)
+        {
+            this.AddMeal(query["Meal"] as FoodDisplay);
+        }
+    }
+
 }
 

@@ -66,6 +66,27 @@ public class NutritionDatabase
         return q.First().food_description;
     }
 
+    public List<FoodNutritionDetail> GetFoodNutritionDetails(int food_id)
+    {
+        // Grab Query
+        string query = @"SELECT f.food_code, f.food_description, na.nutrient_value, nn.nutrient_name
+                            FROM food as f
+                                LEFT JOIN nutrient_amount AS na ON f.food_code = na.food_code
+                                LEFT JOIN nutrient_name AS nn ON na.nutrient_name_id == nn.nutrient_name_id
+                            WHERE f.food_code = '" + food_id + "'";
+
+        List<FoodNutritionDetail> q = this.conn.Query<FoodNutritionDetail>(query).ToList();
+
+        // return list of rows from query.
+        return q.Select(x => new FoodNutritionDetail
+        {
+            food_code = x.food_code,
+            food_description = x.food_description,
+            nutrient_value = x.nutrient_value,
+            nutrient_name = x.nutrient_name
+        }).ToList();
+    }
+
     /* //////////////////////////////////////////////////////////////////
     /// Helper function: splits string (search bar) for database search
     */ //////////////////////////////////////////////////////////////////

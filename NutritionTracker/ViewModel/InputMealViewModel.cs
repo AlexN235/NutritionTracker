@@ -10,14 +10,7 @@ namespace NutruitionTracker.ViewModel;
 
 public partial class InputMealViewModel : ObservableObject
 {
-    private NutritionDatabase db;
-    private MyMealsViewModel myMealsVM;
-    public InputMealViewModel(MyMealsViewModel myMealsVM)
-    {
-        foods = new ObservableCollection<FoodDisplay>();
-        db = new NutritionDatabase();
-        this.myMealsVM = myMealsVM;
-    }
+    private NutritionDatabase database;
 
     [ObservableProperty]
     ObservableCollection<FoodDisplay> foods;
@@ -32,9 +25,15 @@ public partial class InputMealViewModel : ObservableObject
     [ObservableProperty]
     private List<String> searchResult;
 
+    public InputMealViewModel(NutritionDatabase db)
+    {
+        foods = new ObservableCollection<FoodDisplay>();
+        this.database = db;
+    }
+
     partial void OnQueryChanged(string? oldValue, string newValue)
     {
-        SearchResult = db.GetFoodName(newValue);
+        SearchResult = database.GetFoodName(newValue);
     }
 
     [RelayCommand]
@@ -49,8 +48,9 @@ public partial class InputMealViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(IngrediantText) || string.IsNullOrWhiteSpace(WeightText))
             return;
-        string name = db.GetClosestName(IngrediantText);
-        FoodItem newItem = new FoodItem(name);
+
+        string name = database.GetClosestName(IngrediantText);
+        FoodItem newItem = new FoodItem(name, database.GetFoodNutritionDetails(database.GetClosestID(name)));
         FoodDisplay display = new FoodDisplay(name, float.Parse(WeightText), newItem);
         foods.Add(display);
 
@@ -80,14 +80,6 @@ public partial class InputMealViewModel : ObservableObject
 
         // Send meal to MealsViewModel and return to Meals Page.
         newMeal.AddFoodItem(f);
-        myMealsVM.AddMeal(newMeal);
-        await Shell.Current.GoToAsync("..");
+        await Shell.Current.GoToAsync("..",  new Dictionary<string, object> { ["Meal"] = newMeal });
     }
-
-    public List<string> GetFromFood(string s) 
-    {
-        return db.GetFoodName(s);
-    }
-
-
 }

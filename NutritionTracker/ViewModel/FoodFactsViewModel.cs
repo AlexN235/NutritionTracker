@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using NutruitionTracker.NutritionFacts;
 
 namespace NutruitionTracker.ViewModel;
 
-public partial class FoodFactsViewModel : ObservableObject
+public partial class FoodFactsViewModel : ObservableObject, IQueryAttributable
 {
     [ObservableProperty]
     public string name;
@@ -11,16 +12,18 @@ public partial class FoodFactsViewModel : ObservableObject
     [ObservableProperty]
     public List<FoodDisplay> foodList;
 
-    public FoodFactsViewModel() 
+    private NutritionDatabase database;
+
+    public FoodFactsViewModel(NutritionDatabase db) 
     {
+        this.database = db;
         foodList = new List<FoodDisplay>();
     }
 
-    public FoodFactsViewModel(string name) 
-    {
+    public void setName(string name) {
         this.name = name;
 
-        FoodItem f = new FoodItem(name);
+        FoodItem f = new FoodItem(name, database.GetFoodNutritionDetails(database.GetClosestID(name)));
         List<string> names = f.itemsNames;
         List<float> values = f.itemsValue.ToList();
 
@@ -35,5 +38,11 @@ public partial class FoodFactsViewModel : ObservableObject
     public async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
+    }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        FoodDisplay f = (FoodDisplay)query["Food"];
+        setName(f.Name);
     }
 }

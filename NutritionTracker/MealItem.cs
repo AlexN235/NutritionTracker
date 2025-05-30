@@ -12,7 +12,7 @@ public class MealItem : EdibleItem, IEquatable<MealItem>
     public DateTime Date { get; set; }
 
     public MealItem() {
-        database = new NutritionDatabase();
+        database = new NutritionDatabase() ;
         dbNamesTranslation = getDBToReadableDict();
         itemsNames = initializeItemNames();
         itemsValue = new float[itemsNames.Count];

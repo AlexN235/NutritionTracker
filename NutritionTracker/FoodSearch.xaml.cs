@@ -1,29 +1,30 @@
 using CommunityToolkit.Mvvm.Input;
+using NutruitionTracker.NutritionFacts;
 using NutruitionTracker.ViewModel;
+using System.Collections.ObjectModel;
 
 namespace NutruitionTracker;
 
 public partial class FoodSearch : ContentPage
 {
-    FoodSearchViewModel vm;
+    private const int QUERY_LIMIT = 10;
+    ObservableCollection<FoodDisplay> SearchList;
+    NutritionDatabase database;
 
-    public FoodSearch() 
+    public FoodSearch(FoodSearchViewModel vm, NutritionDatabase db) 
     {
         InitializeComponent();
-        this.vm = new FoodSearchViewModel();
-		BindingContext = this.vm;
+		BindingContext = vm;
+        database = db;
+        SearchList = new ObservableCollection<FoodDisplay>();
     }
 
-    public CollectionView GetSelectionCollection()
+    void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
     {
-        return selectionCollection;
-    }
-
-	void SearchBar_TextChanged(object sender, TextChangedEventArgs e) 
-	{
-		string s = ((SearchBar)sender).Text;
-		List<FoodDisplay> r = vm.getSearchResults(s);
-        selectionCollection.ItemsSource = r;
+        SearchList.Clear();
+        string s = ((SearchBar)sender).Text;
+        List<FoodDisplay> f = database.GetFood(s, QUERY_LIMIT);
+        SelectionCollection.ItemsSource = f;
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using NutruitionTracker.ViewModel;
+using NutruitionTracker.NutritionFacts;
 
 namespace NutruitionTracker;
 
@@ -16,6 +17,8 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
+		builder.Services.AddSingleton<NutritionDatabase>();
+
 		builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<MainViewModel>();
 
@@ -24,8 +27,6 @@ public static class MauiProgram
 
 		builder.Services.AddTransient<InputMealPage>();
 		builder.Services.AddTransient<InputMealViewModel>();
-
-        builder.Services.AddTransient<SearchFlyoutPage>();
 
         builder.Services.AddTransient<FoodSearch>();
 		builder.Services.AddTransient<FoodSearchViewModel>();

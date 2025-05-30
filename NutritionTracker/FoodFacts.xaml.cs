@@ -10,7 +10,7 @@ public partial class FoodFacts : ContentPage
 	public FoodFacts() 
 	{
 		InitializeComponent();
-		vm = new FoodFactsViewModel();
+		this.vm = new FoodFactsViewModel(new NutritionFacts.NutritionDatabase());
 		BindingContext = vm;
 		head.Text = "Search to the top left.";
 	}
@@ -18,8 +18,9 @@ public partial class FoodFacts : ContentPage
     public FoodFacts(string name)
     {
         InitializeComponent();
-        vm = new FoodFactsViewModel();
-        BindingContext = new FoodFactsViewModel(name);
+		this.vm = new FoodFactsViewModel(new NutritionFacts.NutritionDatabase());
+		vm.setName(name);
+        BindingContext = vm;
         head.Text = name;
     }
 

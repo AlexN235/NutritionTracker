@@ -1,3 +1,4 @@
+using NutruitionTracker.NutritionFacts;
 using NutruitionTracker.NutritionFacts.Models;
 using NutruitionTracker.ViewModel;
 using System.Collections.ObjectModel;
@@ -7,14 +8,14 @@ namespace NutruitionTracker;
 public partial class InputMealPage : ContentPage
 {
 
-    ObservableCollection<string> searchBarList;
-    InputMealViewModel viewmodel;
-    public InputMealPage(InputMealViewModel vm)
+    public ObservableCollection<string> searchBarList;
+    private NutritionDatabase database;
+    public InputMealPage(InputMealViewModel vm, NutritionDatabase db)
 	{
 		InitializeComponent();
 		BindingContext = vm;
 
-        viewmodel = vm;
+        database = db;
         searchBarList = new ObservableCollection<string>();
 	}
 
@@ -22,7 +23,7 @@ public partial class InputMealPage : ContentPage
     {
         searchBarList.Clear();
         string s = ((SearchBar)sender).Text;
-        List<String> f = viewmodel.GetFromFood(s);
+        List<String> f = database.GetFoodName(s);
         searchResults.ItemsSource = f;
     }
 

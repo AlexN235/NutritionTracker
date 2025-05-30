@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NutruitionTracker.NutritionFacts;
-class FoodNutritionDetail
+public class FoodNutritionDetail
 {
     public int food_code { get; set; }
     public string food_description { get; set; }

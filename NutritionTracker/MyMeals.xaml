@@ -16,7 +16,7 @@
                    Grid.Row="0" HorizontalOptions="Center"/>
             <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Always">
                 <CollectionView ItemsSource="{Binding MealList}" BackgroundColor="Transparent" IsGrouped="True"
-                                SelectionMode="Single" SelectionChanged="OnSelectionChange">
+                                SelectionMode="Single" SelectedItem="{Binding SelectedItem}" SelectionChangedCommand="{Binding SelectionGetDetailsCommand}">
                     <CollectionView.Footer>
                         <Label Text="End of list." HorizontalOptions="Center"/>
                     </CollectionView.Footer>

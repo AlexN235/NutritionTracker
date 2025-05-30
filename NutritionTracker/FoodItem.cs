@@ -19,28 +19,14 @@ public class FoodItem : EdibleItem, IEquatable<FoodItem>
         Name = "N/A";
     }
 
-    public FoodItem(string query) 
+    public FoodItem(String name, List<FoodNutritionDetail> foodNutritionDetails)
     {
         database = new NutritionDatabase();
         dbNamesTranslation = getDBToReadableDict();
         itemsNames = initializeItemNames();
         itemsValue = new float[itemsNames.Count];
-        Name = database.GetClosestName(query);
+        Name = name;
 
-        List<FoodNutritionDetail> foodNutritionDetails = GetFoodNutritionDetails(database.GetClosestID(query));
-        foreach (FoodNutritionDetail detail in foodNutritionDetails)
-            addData(detail);
-    }
-
-    public FoodItem(int id)
-    {
-        database = new NutritionDatabase();
-        dbNamesTranslation = getDBToReadableDict();
-        itemsNames = initializeItemNames();
-        itemsValue = new float[itemsNames.Count];
-        Name = database.GetNameWithID(id);
-        
-        List<FoodNutritionDetail> foodNutritionDetails = GetFoodNutritionDetails(id);
         foreach (FoodNutritionDetail detail in foodNutritionDetails)
             addData(detail);
     }
@@ -101,28 +87,6 @@ public class FoodItem : EdibleItem, IEquatable<FoodItem>
         int index = itemsNames.IndexOf(name);
         itemsValue[index] += detail.nutrient_value;
     }
-
-    private List<FoodNutritionDetail> GetFoodNutritionDetails(int food_id)
-    {
-        // Grab Query
-        string query = @"SELECT f.food_code, f.food_description, na.nutrient_value, nn.nutrient_name
-                            FROM food as f
-                                LEFT JOIN nutrient_amount AS na ON f.food_code = na.food_code
-                                LEFT JOIN nutrient_name AS nn ON na.nutrient_name_id == nn.nutrient_name_id
-                            WHERE f.food_code = '" + food_id + "'";
-
-        List<FoodNutritionDetail> q = database.conn.Query<FoodNutritionDetail>(query).ToList();
-
-        // return list of rows from query.
-        return q.Select(x => new FoodNutritionDetail
-        {
-            food_code = x.food_code,
-            food_description = x.food_description,
-            nutrient_value = x.nutrient_value,
-            nutrient_name = x.nutrient_name
-        }).ToList();
-    }
-
 }
 
 /* Proxiamtes:

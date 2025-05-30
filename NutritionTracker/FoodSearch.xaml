@@ -15,16 +15,18 @@
                 <SearchBar Text="{Binding SearchBar}" BackgroundColor="LightGray" Grid.Column="1" TextColor="Black" HorizontalOptions="Fill" Margin="20" TextChanged="SearchBar_TextChanged"/>
             </Grid>
 
-            <Grid Padding="50">
-                <CollectionView x:Name="selectionCollection" BackgroundColor="Grey" SelectionMode="Single">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="local:FoodDisplay">
-                            <Grid Padding="10">
-                                <Label Text="{Binding Name}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+        <Button Text="Search" HorizontalOptions="Center" WidthRequest="100" HeightRequest="50" Command="{Binding GoToFoodFactsCommand}"/>
+
+        <Grid Padding="50">
+            <CollectionView x:Name="SelectionCollection" BackgroundColor="Grey" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="local:FoodDisplay">
+                        <Grid Padding="10">
+                            <Label Text="{Binding Name}"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </Grid>
         </VerticalStackLayout>
 

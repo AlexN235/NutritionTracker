@@ -8,9 +8,7 @@ namespace NutruitionTracker.ViewModel;
 public partial class MainViewModel : ObservableObject
 {
 
-    public MainViewModel() 
-    {
-    }
+    public MainViewModel()  { }
 
     [ObservableProperty]
     public string text;
@@ -25,7 +23,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     async Task GoToFoodSearch()
     {
-        await Shell.Current.GoToAsync(nameof(SearchFlyoutPage));
+        await Shell.Current.GoToAsync(nameof(FoodSearch));
     }
 
 }
