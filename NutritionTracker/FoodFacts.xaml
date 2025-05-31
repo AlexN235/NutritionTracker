@@ -6,7 +6,7 @@
              x:DataType="viewmodel:FoodFactsViewModel">
     <VerticalStackLayout BackgroundColor="LightSlateGray" Padding="10" HeightRequest="700" HorizontalOptions="Fill">
         <Grid ColumnDefinitions="0.1*, 0.1*, 0.1*, 0.7*">
-            <Button Text="Back" Command="{Binding GoBackCommand}" HorizontalOptions="Start" Grid.Column="1"/>
+            <Button Text="Back" Command="{Binding BackCommand}" HorizontalOptions="Start" Grid.Column="1"/>
         </Grid>
         <Label x:Name="head" FontAttributes="Bold" FontSize="Large" x:DataType="{x:Type x:String}" TextColor="White" VerticalOptions="Fill" HorizontalOptions="Center"/>
         <Grid ColumnDefinitions="0.15*, 0.7*, 0.15*" RowDefinitions="auto, auto">

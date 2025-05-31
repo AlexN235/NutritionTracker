@@ -7,27 +7,16 @@ namespace NutruitionTracker;
 public partial class FoodFacts : ContentPage
 {
 	FoodFactsViewModel vm;
-	public FoodFacts() 
+	public FoodFacts(FoodFactsViewModel vm) 
 	{
 		InitializeComponent();
-		this.vm = new FoodFactsViewModel(new NutritionFacts.NutritionDatabase());
 		BindingContext = vm;
 		head.Text = "Search to the top left.";
 	}
-
-    public FoodFacts(string name)
-    {
-        InitializeComponent();
-		this.vm = new FoodFactsViewModel(new NutritionFacts.NutritionDatabase());
-		vm.setName(name);
-        BindingContext = vm;
-        head.Text = name;
-    }
 
     public FoodFacts(FoodFactsViewModel vm, string name)
 	{
 		InitializeComponent();
 		BindingContext = vm;
 	}
-
 }

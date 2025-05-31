@@ -1,21 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using NutruitionTracker.NutritionFacts;
 using System.Xml.Linq;
 
 namespace NutruitionTracker.ViewModel;
 
-public partial class DisplayDetailViewModel : ObservableObject
+public partial class DisplayDetailViewModel : FoodFactsViewModel, IQueryAttributable
 {
-    [ObservableProperty]
-    public List<FoodDisplay> food;
-
     private FoodDisplay Item;
 
-    public DisplayDetailViewModel()  { }
+    public DisplayDetailViewModel(NutritionDatabase db) : base(db)  { }
 
-    public void Set(FoodDisplay food) 
+    public void setName(FoodDisplay food) 
     {
-        Item = food;
+        this.Item = food;
+        this.Name = food.Name;
+
         EdibleItem f = food.Item;
         List<string> names = f.itemsNames;
         List<float> values = f.itemsValue.ToList();
@@ -24,14 +24,8 @@ public partial class DisplayDetailViewModel : ObservableObject
         for (int i = 0; i < names.Count; i++)
             temp.Add(new FoodDisplay(names[i], values[i]));
 
-        Food = temp;
+        FoodList = temp;
         OnPropertyChanged();
-    }
-
-    [RelayCommand]
-    async void Back() 
-    {
-        await Shell.Current.GoToAsync("..");
     }
 
     [RelayCommand]
@@ -41,6 +35,13 @@ public partial class DisplayDetailViewModel : ObservableObject
         {
             ["toDelete"] = this.Item
         });
+    }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.Count == 0 || query["Food"] == null)
+            return;
+        this.setName((FoodDisplay)query["Food"]);
     }
 
 }

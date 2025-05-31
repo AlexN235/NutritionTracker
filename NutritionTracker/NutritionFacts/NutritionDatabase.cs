@@ -106,6 +106,7 @@ public class NutritionDatabase
         }
         return query + "LIMIT 5";
     }
+
     private static string GetSQLQuery(string s, int limit)
     {
         string query = $"SELECT * FROM food WHERE";

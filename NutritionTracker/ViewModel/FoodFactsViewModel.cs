@@ -12,7 +12,7 @@ public partial class FoodFactsViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     public List<FoodDisplay> foodList;
 
-    private NutritionDatabase database;
+    protected NutritionDatabase database;
 
     public FoodFactsViewModel(NutritionDatabase db) 
     {
@@ -35,7 +35,7 @@ public partial class FoodFactsViewModel : ObservableObject, IQueryAttributable
     }
 
     [RelayCommand]
-    public async Task GoBack()
+    public async Task Back()
     {
         await Shell.Current.GoToAsync("..");
     }

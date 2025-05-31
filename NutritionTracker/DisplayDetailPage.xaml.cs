@@ -2,21 +2,14 @@ namespace NutruitionTracker;
 using NutruitionTracker.ViewModel;
 using System.Collections.Generic;
 
-public partial class DisplayDetailPage : ContentPage, IQueryAttributable
+public partial class DisplayDetailPage : ContentPage
 {
 
     DisplayDetailViewModel vm;
 
-    public DisplayDetailPage()
+    public DisplayDetailPage(DisplayDetailViewModel vm)
 	{
 		InitializeComponent();
-        vm = new DisplayDetailViewModel();
         BindingContext = vm;
-    }
-
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        var q = query["foodID"] as FoodDisplay;
-        vm.Set(q);
     }
 }

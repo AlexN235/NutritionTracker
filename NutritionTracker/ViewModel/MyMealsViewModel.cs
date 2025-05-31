@@ -36,7 +36,7 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
     {
         await Shell.Current.GoToAsync(nameof(DisplayDetailPage), new Dictionary<string, object>
         {
-            ["foodID"] = selectedItem
+            ["Food"] = selectedItem
         });
     }
 
