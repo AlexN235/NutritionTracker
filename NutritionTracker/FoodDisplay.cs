@@ -36,6 +36,7 @@ public class FoodDisplay : IEquatable<FoodDisplay>
 
     public bool Equals(FoodDisplay other) 
     {
+        if(other == null) return false;
         return this.Name == other.Name && this.Item.Equals(other.Item);
     }
 }

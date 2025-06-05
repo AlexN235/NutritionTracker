@@ -36,7 +36,7 @@ public partial class FoodFactsViewModel : ObservableObject, IQueryAttributable
 
     [RelayCommand]
     public async Task Back()
-    {
+    { 
         await Shell.Current.GoToAsync("..");
     }
 

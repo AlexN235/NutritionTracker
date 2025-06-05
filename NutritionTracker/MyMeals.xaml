@@ -16,7 +16,7 @@
                    Grid.Row="0" HorizontalOptions="Center"/>
             <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Always">
                 <CollectionView ItemsSource="{Binding MealList}" BackgroundColor="Transparent" IsGrouped="True"
-                                SelectionMode="Single" SelectedItem="{Binding SelectedItem}" SelectionChangedCommand="{Binding SelectionGetDetailsCommand}">
+                                SelectionMode="Single" SelectedItem="{Binding SelectedItem}" SelectionChangedCommand="{Binding SelectionGoToDetailsCommand}">
                     <CollectionView.Footer>
                         <Label Text="End of list." HorizontalOptions="Center"/>
                     </CollectionView.Footer>
@@ -39,7 +39,7 @@
                 </CollectionView>
             </ScrollView>
             
-            <Button Text="Add Meal" Grid.Row="2" Command="{Binding AddMealCommand}" 
+            <Button Text="Add Meal" Grid.Row="2" Command="{Binding GoToAddMealCommand}" 
                     FontSize="Small" Padding="10" VerticalOptions="End"/>
         </Grid>
     </Grid>

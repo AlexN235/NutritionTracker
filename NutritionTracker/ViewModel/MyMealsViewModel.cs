@@ -26,31 +26,35 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
     }
 
     [RelayCommand]
-    async Task AddMeal()
+    async Task GoToAddMeal()
     {
         await Shell.Current.GoToAsync(nameof(InputMealPage));
+        Task.Delay(100);
     }
 
     [RelayCommand]
-    async Task OnSelectionGetDetails() 
+    async Task OnSelectionGoToDetails() 
     {
-        await Shell.Current.GoToAsync(nameof(DisplayDetailPage), new Dictionary<string, object>
+        Dictionary<string, object> dict = new Dictionary<string, object>
         {
             ["Food"] = selectedItem
-        });
+        };
+        selectedItem = null;
+        await Shell.Current.GoToAsync(nameof(DisplayDetailPage), dict);
     }
 
     private void DeleteMeal(FoodDisplay f) 
     {
-        foreach (FoodDisplayGroup group in mealList) 
+        foreach (FoodDisplayGroup group in mealList.ToList()) 
         {
             for (int i = 0; i < group.Count; i++)
             {
                 if (group[i].Equals(f)) {
                     group.RemoveAt(i);
+                    UpdateList(group.Name);
                 }
             }
-        } 
+        }
     }
 
     private void AddMeal(FoodDisplay newMeal) 
@@ -66,11 +70,36 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
             List<FoodDisplay> temp = [newMeal];
             mealList.Add(new FoodDisplayGroup(date.ToString("d"), temp));
         }
+        UpdateList(date.ToString("d"));
+    }
+
+    private void UpdateList(string date)
+    {
+        List<FoodDisplay> food_list = new List<FoodDisplay>();
+        foreach (FoodDisplayGroup foodDisplays in mealList.ToList())
+        {
+            if (foodDisplays.Name == date) 
+            {
+                foreach (FoodDisplay foodDisplay in foodDisplays)
+                {
+                    food_list.Add(foodDisplay);
+                }
+            }
+        }
+
+        foreach (FoodDisplayGroup foodDisplays in mealList.ToList())
+        {
+            if (foodDisplays.Name == date)
+            {
+                mealList.Remove(foodDisplays);
+                mealList.Add(new FoodDisplayGroup(date, food_list));
+            }
+        }
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.Count == 0) 
+        if (query.Count == 0)
         {
             return;
         }
@@ -82,7 +111,11 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         {
             this.AddMeal(query["Meal"] as FoodDisplay);
         }
+        else
+            return;
+        
     }
+
 
 }
 
