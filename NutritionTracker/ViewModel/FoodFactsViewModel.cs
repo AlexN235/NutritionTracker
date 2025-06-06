@@ -18,10 +18,11 @@ public partial class FoodFactsViewModel : ObservableObject, IQueryAttributable
     {
         this.database = db;
         foodList = new List<FoodDisplay>();
+        name = "Test Name";
     }
 
     public void setName(string name) {
-        this.name = name;
+        this.Name = name;
 
         FoodItem f = new FoodItem(name, database.GetFoodNutritionDetails(database.GetClosestID(name)));
         List<string> names = f.itemsNames;
@@ -32,16 +33,20 @@ public partial class FoodFactsViewModel : ObservableObject, IQueryAttributable
             temp.Add(new FoodDisplay(names[i], values[i]));
 
         FoodList = temp;
+        
     }
 
     [RelayCommand]
     public async Task Back()
-    { 
+    {
+        //Task.Delay(100);
         await Shell.Current.GoToAsync("..");
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
+        if (query.Count() == 0)
+            return;
         FoodDisplay f = (FoodDisplay)query["Food"];
         setName(f.Name);
     }

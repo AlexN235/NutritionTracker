@@ -6,6 +6,7 @@
              x:DataType="viewmodel:DisplayDetailViewModel"
              Title="DisplayDetailPage"
              BackgroundColor="White">
+    
     <Grid RowDefinitions="auto, 0.9*, 50" Padding="10" RowSpacing="20" >
         <Label Text="{Binding Name}" Grid.Row="0" FontSize="Title" TextColor="Black"/>
         <ScrollView VerticalScrollBarVisibility="Always" Grid.Row="1" Padding="7">

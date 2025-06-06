@@ -11,7 +11,6 @@ public partial class FoodFacts : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = vm;
-		head.Text = "Search to the top left.";
 	}
 
     public FoodFacts(FoodFactsViewModel vm, string name)

@@ -5,23 +5,11 @@ using System.Xml.Linq;
 
 namespace NutruitionTracker.ViewModel;
 
-public partial class DisplayDetailViewModel : ObservableObject, IQueryAttributable
+public partial class DisplayDetailViewModel : FoodFactsViewModel, IQueryAttributable
 {
-    [ObservableProperty]
-    public string name;
-
-    [ObservableProperty]
-    public List<FoodDisplay> foodList;
-
-    protected NutritionDatabase database;
-
     private FoodDisplay Item;
 
-    public DisplayDetailViewModel(NutritionDatabase db)
-    {
-        this.database = db;
-        foodList = new List<FoodDisplay>();
-    }
+    public DisplayDetailViewModel(NutritionDatabase db) : base(db) { }
 
     public void setName(FoodDisplay food) 
     {
@@ -47,18 +35,10 @@ public partial class DisplayDetailViewModel : ObservableObject, IQueryAttributab
     [RelayCommand]
     async void Delete()
     {
-        Task.Delay(100);
         await Shell.Current.GoToAsync("..", new Dictionary<string, object>
         {
             ["toDelete"] = this.Item
         });
-    }
-
-    [RelayCommand]
-    public async Task Back()
-    {
-        Task.Delay(100);
-        await Shell.Current.GoToAsync("..");
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)

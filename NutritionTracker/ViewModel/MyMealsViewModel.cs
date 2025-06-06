@@ -39,7 +39,6 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         {
             ["Food"] = selectedItem
         };
-        selectedItem = null;
         await Shell.Current.GoToAsync(nameof(DisplayDetailPage), dict);
     }
 
@@ -74,7 +73,8 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
     }
 
     private void UpdateList(string date)
-    {
+    { 
+        // Update observable collection of meals to dynamically display when adding or deleting meals.
         List<FoodDisplay> food_list = new List<FoodDisplay>();
         foreach (FoodDisplayGroup foodDisplays in mealList.ToList())
         {
@@ -86,7 +86,6 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
                 }
             }
         }
-
         foreach (FoodDisplayGroup foodDisplays in mealList.ToList())
         {
             if (foodDisplays.Name == date)
@@ -120,10 +119,7 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
             this.AddMeal(q);
         }
         else
-            return;
-        
+            return; 
     }
-
-
 }
 
