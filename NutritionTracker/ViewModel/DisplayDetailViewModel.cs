@@ -63,6 +63,8 @@ public partial class DisplayDetailViewModel : ObservableObject, IQueryAttributab
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
+        if (query.Count() == 0)
+            return;
         FoodDisplay f = (FoodDisplay)query["Food"];
         setName(f);
     }

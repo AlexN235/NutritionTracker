@@ -10,13 +10,13 @@
     <Grid RowDefinitions="45, 1*" Padding="5" BackgroundColor="White">
         <Button Text="Back" FontSize="Small" Command="{Binding GoBackCommand}"
                 Grid.Row="0" HorizontalOptions="Start"/>
-        <Grid RowDefinitions="auto, 0.5*, 45"
+        <Grid RowDefinitions="auto, 0.5*, 45, 45"
               Grid.Row="1" BackgroundColor="White" RowSpacing="10" ColumnSpacing="10" Padding="20">
             <Label Text="Meal Records!" TextColor="Black" FontSize="Medium"
                    Grid.Row="0" HorizontalOptions="Center"/>
             <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Always">
                 <CollectionView ItemsSource="{Binding MealList}" BackgroundColor="Transparent" IsGrouped="True"
-                                SelectionMode="Single" SelectedItem="{Binding SelectedItem}" SelectionChangedCommand="{Binding SelectionGoToDetailsCommand}">
+                                SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
                     <CollectionView.Footer>
                         <Label Text="End of list." HorizontalOptions="Center"/>
                     </CollectionView.Footer>
@@ -26,6 +26,10 @@
                             <Label Text="{Binding Name}" TextColor="Grey" FontSize="Small"/>
                         </DataTemplate>
                     </CollectionView.GroupHeaderTemplate>
+
+                    <CollectionView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectionGoToDetailsCommand}"/>
+                    </CollectionView.GestureRecognizers>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="local:FoodDisplay">
@@ -38,8 +42,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </ScrollView>
-            
-            <Button Text="Add Meal" Grid.Row="2" Command="{Binding GoToAddMealCommand}" 
+            <Button Text="Add Meal" Grid.Row="3" Command="{Binding GoToAddMealCommand}" 
                     FontSize="Small" Padding="10" VerticalOptions="End"/>
         </Grid>
     </Grid>

@@ -105,11 +105,19 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         }
         else if (query.ContainsKey("toDelete"))
         {
-            this.DeleteMeal(query["toDelete"] as FoodDisplay);
+            FoodDisplay q = query["toDelete"] as FoodDisplay;
+            if (q == null)
+                return;
+            query.Clear();
+            this.DeleteMeal(q);
         }
         else if (query.ContainsKey("Meal") != null)
         {
-            this.AddMeal(query["Meal"] as FoodDisplay);
+            FoodDisplay q = query["Meal"] as FoodDisplay;
+            if (q == null)
+                return;
+            query.Clear();
+            this.AddMeal(q);
         }
         else
             return;
