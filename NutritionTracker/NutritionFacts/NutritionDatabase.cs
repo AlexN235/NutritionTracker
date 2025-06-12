@@ -1,5 +1,7 @@
-﻿using SQLite;
-using NutruitionTracker.NutritionFacts.Models;
+﻿using NutruitionTracker.NutritionFacts.Models;
+using SQLite;
+using System.Collections.Generic;
+using Windows.Security.Authentication.Web.Core;
 
 namespace NutruitionTracker.NutritionFacts;
 public class NutritionDatabase
@@ -31,7 +33,7 @@ public class NutritionDatabase
         return res;
     }
 
-    public List<FoodDisplay> GetFood(string name, int limit)
+    public List<FoodDisplay> GetFood(string name, int limit = 5)
     {
         List<FoodDisplay> foodlist = new List<FoodDisplay>();
         if (name == "")
@@ -41,7 +43,58 @@ public class NutritionDatabase
         foreach(Food f in foods) 
             foodlist.Add(new FoodDisplay(f.food_description));
 
+        // Testing
+        foodlist = getBestMatches(name);
+
         return foodlist;
+    }
+
+    private List<FoodDisplay> getBestMatches(string name, int limit=5) 
+    {
+        List<FoodDisplay> foodList = new List<FoodDisplay>();
+        if (name == "")
+            return foodList;
+
+        // Find for exact match looking from start.
+        string query = $"SELECT * FROM food WHERE";
+        query += " food.food_description LIKE " + name + "%'";
+        query += "LIMIT " + limit;
+        // Do something with query.
+        List<Food> foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
+        foreach (Food f in foods)
+            foodList.Add(new FoodDisplay(f.food_description));
+
+        // Prioritize first word that matching starting and has other matches
+        string[] words = SplitSearchbar(name);
+        if(words.Count()  > 0) {
+            query = $"SELECT * FROM food WHERE food.food_description LIKE '%" + words[0] + "%'";
+            for (int i = 1; i < words.Length; i++)
+            {
+                query += " AND food.food_description LIKE '%" + words[i] + "%'";
+            }
+            foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
+            foreach (Food f in foods)
+                foodList.Add(new FoodDisplay(f.food_description));
+        }
+        query += "LIMIT " + limit;
+        // Do something with query.
+
+        // Contains all words
+        query = $"SELECT * FROM food WHERE";
+        for (int i = 0; i < words.Length; i++)
+        {
+            if (i != 0)
+                query += " AND";
+            query += " food.food_description LIKE '%" + words[i] + "%'";
+        }
+        foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
+        foreach (Food f in foods) {
+            if (foodList.Count() > 4)
+                break;
+            foodList.Add(new FoodDisplay(f.food_description));
+        }
+
+        return foodList;
     }
 
     public int GetClosestID(string s) 
