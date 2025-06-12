@@ -3,9 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
 using NutruitionTracker.NutritionFacts;
-using SQLite;
-using NutruitionTracker.NutritionFacts.Models;
-using System.Text.RegularExpressions;
 namespace NutruitionTracker.ViewModel;
 
 public partial class InputMealViewModel : ObservableObject
@@ -24,6 +21,8 @@ public partial class InputMealViewModel : ObservableObject
     private string query;
     [ObservableProperty]
     private List<String> searchResult;
+    [ObservableProperty]
+    FoodDisplay selectedItem;
 
     public InputMealViewModel(NutritionDatabase db)
     {
@@ -49,11 +48,23 @@ public partial class InputMealViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(IngrediantText) || string.IsNullOrWhiteSpace(WeightText))
             return;
 
-        string name = database.GetClosestName(IngrediantText);
-        FoodItem newItem = new FoodItem(name, database.GetFoodNutritionDetails(database.GetClosestID(name)));
-        FoodDisplay display = new FoodDisplay(name, float.Parse(WeightText), newItem);
-        foods.Add(display);
+        // Add selected item, if no selection made add top on list choice.
 
+        FoodDisplay display;
+        if (SelectedItem != null) 
+        {
+            display = SelectedItem;
+        }
+        else 
+        {
+            string name = database.GetClosestName(IngrediantText);
+            // POSSIBLE ERROR: If no closest choice can be made.
+            FoodItem newItem = new FoodItem(name, database.GetFoodNutritionDetails(database.GetClosestID(name)));
+            display = new FoodDisplay(name, float.Parse(WeightText), newItem);
+        }
+        Foods.Add(display);
+
+        SelectedItem = null;
         IngrediantText = string.Empty;
         WeightText = string.Empty;
     }
@@ -66,19 +77,22 @@ public partial class InputMealViewModel : ObservableObject
             return;
         
         // Create new meal to send back to Meal page.
+
         FoodDisplay newMeal = new FoodDisplay(this.MealName);
         MealItem f = new MealItem();
 
         // Create list of foods and their weights to combine into the meal.
+
         List<FoodItem> food_list = new List<FoodItem>();
         List<float> weight_list = new List<float>();
-        foreach (FoodDisplay food in foods) { 
+        foreach (FoodDisplay food in Foods) { 
             food_list.Add((FoodItem)food.Item);
             weight_list.Add(food.Value);
         }
         f.AddFoodsToFoodItem(food_list, weight_list);
 
         // Send meal to MealsViewModel and return to Meals Page.
+
         newMeal.AddFoodItem(f);
         await Shell.Current.GoToAsync("..",  new Dictionary<string, object> { ["Meal"] = newMeal });
     }

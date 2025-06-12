@@ -1,7 +1,7 @@
 ﻿using NutruitionTracker.NutritionFacts.Models;
 using SQLite;
 using System.Collections.Generic;
-using Windows.Security.Authentication.Web.Core;
+using System.Diagnostics;
 
 namespace NutruitionTracker.NutritionFacts;
 public class NutritionDatabase
@@ -22,36 +22,26 @@ public class NutritionDatabase
 
     public List<string> GetFoodName(string name)
     {
-        if (name == "")
-            return new List<String>();
-
-        List<Food> q = conn.Query<Food>(GetSQLQuery(name)).ToList();
         List<string> res = new List<string>();
-        foreach (Food f in q) 
-            res.Add(f.food_description);
+        if (name == "")
+            return res;
+
+        List<FoodDisplay> foods = getBestMatches(name);
+        foreach (FoodDisplay f in foods) 
+            res.Add(f.Name);
         
         return res;
     }
 
     public List<FoodDisplay> GetFood(string name, int limit = 5)
     {
-        List<FoodDisplay> foodlist = new List<FoodDisplay>();
-        if (name == "")
-            return foodlist;
-
-        List<Food> foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
-        foreach(Food f in foods) 
-            foodlist.Add(new FoodDisplay(f.food_description));
-
-        // Testing
-        foodlist = getBestMatches(name);
-
-        return foodlist;
+        return getBestMatches(name);
     }
 
     private List<FoodDisplay> getBestMatches(string name, int limit=5) 
     {
         List<FoodDisplay> foodList = new List<FoodDisplay>();
+        HashSet<FoodDisplay> temp = new HashSet<FoodDisplay>();
         if (name == "")
             return foodList;
 
@@ -62,7 +52,7 @@ public class NutritionDatabase
         // Do something with query.
         List<Food> foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
         foreach (Food f in foods)
-            foodList.Add(new FoodDisplay(f.food_description));
+            temp.Add(new FoodDisplay(f.food_description));
 
         // Prioritize first word that matching starting and has other matches
         string[] words = SplitSearchbar(name);
@@ -74,7 +64,7 @@ public class NutritionDatabase
             }
             foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
             foreach (Food f in foods)
-                foodList.Add(new FoodDisplay(f.food_description));
+                temp.Add(new FoodDisplay(f.food_description));
         }
         query += "LIMIT " + limit;
         // Do something with query.
@@ -89,12 +79,18 @@ public class NutritionDatabase
         }
         foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
         foreach (Food f in foods) {
-            if (foodList.Count() > 4)
+            if (temp.Count() > limit)
                 break;
-            foodList.Add(new FoodDisplay(f.food_description));
+            temp.Add(new FoodDisplay(f.food_description));
         }
 
-        return foodList;
+        foreach (FoodDisplay f in temp) 
+        {
+            if (f.Equals(temp))
+                Debug.WriteLine(f.Name);
+        }
+
+        return temp.ToList();
     }
 
     public int GetClosestID(string s) 

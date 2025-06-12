@@ -1,6 +1,8 @@
-﻿namespace NutruitionTracker;
+﻿using System.Diagnostics;
 
-public class FoodDisplay : IEquatable<FoodDisplay>
+namespace NutruitionTracker;
+
+public class FoodDisplay
 {
     public FoodDisplay(string name)
     {
@@ -34,9 +36,23 @@ public class FoodDisplay : IEquatable<FoodDisplay>
         return DateTime.Now;
     }
 
-    public bool Equals(FoodDisplay other) 
+    public override bool Equals(Object other) 
     {
-        if(other == null || other.Item == null) return false;
-        return this.Name == other.Name && this.Item.Equals(other.Item);
+        Debug.WriteLine("Inside Equals");
+        if (other is not FoodDisplay) return false;
+        if(other == null) return false;
+
+        if (this.Item == null)
+            return this.Name == ((FoodDisplay)other).Name;// && this.Item.Equals(((FoodDisplay)other).Item);
+        else { 
+            if (((FoodDisplay)other).Item == null)
+                return false;
+            return this.Name == ((FoodDisplay)other).Name && this.Item.Equals(((FoodDisplay)other).Item);
+        }
+    }
+
+    public override int GetHashCode()
+    {
+        return this.Name.GetHashCode();
     }
 }
