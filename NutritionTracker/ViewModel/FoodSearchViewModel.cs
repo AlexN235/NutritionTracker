@@ -21,12 +21,12 @@ public partial class FoodSearchViewModel : ObservableObject
     [RelayCommand]
     async Task GoToFoodFacts() 
     {
-        if (selectedItem == null)
+        if (SelectedItem == null)
             return;
 
         Dictionary<string, object> dict = new Dictionary<string, object>
         {
-            ["Food"] = selectedItem
+            ["Food"] = SelectedItem
         };
         await Shell.Current.GoToAsync(nameof(FoodFacts), dict);
     }

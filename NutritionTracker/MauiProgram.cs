@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-using NutruitionTracker.ViewModel;
+﻿using NutruitionTracker.ViewModel;
 using NutruitionTracker.NutritionFacts;
+using CommunityToolkit.Maui;
+using CommunityToolkit.Mvvm;
+using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui.Storage;
 
 namespace NutruitionTracker;
 
@@ -11,6 +14,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
+			.UseMauiCommunityToolkit()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -18,6 +22,7 @@ public static class MauiProgram
 			});
 
 		builder.Services.AddSingleton<NutritionDatabase>();
+		builder.Services.AddSingleton<IFileSaver>(FileSaver.Default);
 
 		builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<MainViewModel>();
@@ -36,7 +41,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<DisplayDetailPage>();
         builder.Services.AddTransient<DisplayDetailViewModel>();
-
+		
 
 
 #if DEBUG

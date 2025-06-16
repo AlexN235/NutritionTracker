@@ -20,6 +20,16 @@ public class MealItem : EdibleItem, IEquatable<MealItem>
         Date = DateTime.Today;
     }
 
+    public MealItem(float[] values, string name, DateTime date)
+    {
+        database = new NutritionDatabase();
+        dbNamesTranslation = getDBToReadableDict();
+        itemsNames = initializeItemNames();
+        itemsValue = values;
+        Name = name;
+        Date = date;
+    }
+
     public void AddFoodsToFoodItem(List<FoodItem> food_list, List<float> weights)
     {
         for (int i = 0; i < food_list.Count; i++)
