@@ -38,7 +38,6 @@ public class FoodDisplay
 
     public override bool Equals(Object other) 
     {
-        Debug.WriteLine("Inside Equals");
         if (other is not FoodDisplay) return false;
         if(other == null) return false;
 

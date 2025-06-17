@@ -11,42 +11,34 @@ public partial class DisplayDetailViewModel : FoodFactsViewModel, IQueryAttribut
 
     public DisplayDetailViewModel(NutritionDatabase db) : base(db) { }
 
-    public void setName(FoodDisplay food) 
-    {
-        
-        if (food == null)
-            return;
-
-        this.Item = food;
-        this.Name = food.Name;
-
-        EdibleItem f = food.Item;
-        List<string> names = f.itemsNames;
-        List<float> values = f.itemsValue.ToList();
-
-        List<FoodDisplay> temp = new List<FoodDisplay>();
-        for (int i = 0; i < names.Count; i++)
-            temp.Add(new FoodDisplay(names[i], values[i]));
-
-        FoodList = temp;
-        OnPropertyChanged();
-    }
-
     [RelayCommand]
-    async void Delete()
+    async Task Delete()
     {
         await Shell.Current.GoToAsync("..", new Dictionary<string, object>
         {
             ["toDelete"] = this.Item
         });
     }
-
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    public new void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.Count() == 0)
             return;
         FoodDisplay f = (FoodDisplay)query["Food"];
-        setName(f);
+        SetInfo(f);
     }
+    public void SetInfo(FoodDisplay food)
+    {
+        if (food == null)
+            return;
 
+        this.Item = food;
+        this.Name = food.Name;
+
+        List<string> names = food.Item.itemsNames;
+        List<float> values = food.Item.itemsValue.ToList();
+
+        FoodList = new List<FoodDisplay>();
+        for (int i = 0; i < names.Count; i++)
+            FoodList.Add(new FoodDisplay(names[i], values[i]));
+    }
 }

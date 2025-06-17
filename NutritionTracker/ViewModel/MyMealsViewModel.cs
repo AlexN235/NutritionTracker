@@ -1,14 +1,8 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Storage;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CsvHelper;
 using NutruitionTracker.NutritionFacts;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Text;
-
-
 
 namespace NutruitionTracker.ViewModel;
 
@@ -18,20 +12,21 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
     private ObservableCollection<FoodDisplayGroup> mealList;
     [ObservableProperty]
     private FoodDisplay selectedItem;
-    private IFileSaver fileSaver;
-    
 
-    public MyMealsViewModel(IFileSaver FileSaver) 
+    private const string FILENAME = "MealInfo.csv";
+    private string FilePath { get; set; }
+
+    public MyMealsViewModel() 
     {
         MealList = new ObservableCollection<FoodDisplayGroup>();
-        this.fileSaver = FileSaver;
-        ReadCSVMealData();
+        FilePath = Path.Combine(FileSystem.Current.AppDataDirectory, FILENAME);
+        ImportLocalData();
     }
 
     [RelayCommand]
     async Task GoBack() 
     {
-        WriteCSVMealData(MealList.ToList());
+        SaveLocalData(MealList.ToList());
         await Shell.Current.GoToAsync("..");
     }
 
@@ -39,7 +34,6 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
     async Task GoToAddMeal()
     {
         await Shell.Current.GoToAsync(nameof(InputMealPage));
-        Task.Delay(100);
     }
 
     [RelayCommand]
@@ -82,9 +76,9 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         UpdateList(date.ToString("d"));
     }
 
+    // Update observable collection of meals to dynamically display when adding or deleting meals.
     private void UpdateList(string date)
     { 
-        // Update observable collection of meals to dynamically display when adding or deleting meals.
         List<FoodDisplay> food_list = new List<FoodDisplay>();
         foreach (FoodDisplayGroup foodDisplays in MealList.ToList())
         {
@@ -114,36 +108,29 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         }
         else if (query.ContainsKey("toDelete"))
         {
-            FoodDisplay q = query["toDelete"] as FoodDisplay;
-            if (q == null)
+            if (query["toDelete"] is not FoodDisplay q)
                 return;
-            query.Clear();
             this.DeleteMeal(q);
         }
-        else if (query.ContainsKey("Meal") != null)
+        else if (query?.ContainsKey("Meal") != null)
         {
-            FoodDisplay q = query["Meal"] as FoodDisplay;
-            if (q == null)
+            if (query["Meal"] is not FoodDisplay q)
                 return;
-            query.Clear();
             this.AddMeal(q);
         }
-        else
-            return; 
+        query?.Clear();
+        return;
     }
 
-    public void ReadCSVMealData()
+    // Get data from locally saved files and populate the meal list.
+    public void ImportLocalData()
     {
-        string fileName = "MealInfo.csv";
-        string path = Path.Combine(FileSystem.Current.AppDataDirectory, fileName);
-
-        if (!File.Exists(path)) 
+        if (!File.Exists(FilePath)) 
         {
-            File.Create(path);
-            Debug.WriteLine("BACK IN IT");
+            File.Create(FilePath);
         }
 
-        using StreamReader reader = new StreamReader(path);
+        using StreamReader reader = new StreamReader(FilePath);
         using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.CurrentCulture))
         {
             var records = csv.GetRecords<Meal>();
@@ -151,18 +138,15 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         }
     }
 
-    public void WriteCSVMealData(List<FoodDisplayGroup> foods)
+    // Saves meal list locally.
+    public void SaveLocalData(List<FoodDisplayGroup> foods)
     {
-        string fileName = "MealInfo.csv";
-        string path = Path.Combine(FileSystem.Current.AppDataDirectory, fileName);
-
-        Debug.WriteLine(FileSystem.Current.AppDataDirectory);
-        if(!File.Exists(path)) 
+        if(!File.Exists(FilePath)) 
         {
-            //await SaveFile(FileSystem.Current.AppDataDirectory, new CancellationToken());
+            return;
         }
 
-        using StreamWriter writer = new StreamWriter(path);
+        using StreamWriter writer = new StreamWriter(FilePath);
         using (var csv = new CsvWriter(writer, System.Globalization.CultureInfo.CurrentCulture))
         {
             List<Meal> meals = new List<Meal>();
@@ -181,22 +165,22 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
 
     private List<FoodDisplayGroup> MealToFood(IEnumerable<Meal> meals)
     {
-        List<FoodDisplayGroup> foodDisplays = new List<FoodDisplayGroup>();
+        // Deserialize data into groups
         Dictionary<string, List<FoodDisplay>> map = new Dictionary<string, List<FoodDisplay>>();
         List<string> dateRecords = new List<string>();
         foreach (Meal meal in meals)
         {
             if (!dateRecords.Contains(meal.Date))
             {
+                map.Add(meal.Date, new List<FoodDisplay>());
                 dateRecords.Add(meal.Date);
-                List<FoodDisplay> newGroup = new List<FoodDisplay>();
-                map.Add(meal.Date, newGroup);
             }
             MealItem m = new MealItem(meal.getMealValues(), meal.Name, meal.FullDate);
             FoodDisplay foodDisplay = new FoodDisplay(meal.DisplayName, meal.Value, m);
             map[meal.Date].Add(foodDisplay);
         }
 
+        List<FoodDisplayGroup> foodDisplays = new List<FoodDisplayGroup>();
         foreach (string group in dateRecords)
         {
             foodDisplays.Add(new FoodDisplayGroup(group, map[group]));
@@ -204,9 +188,9 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         return foodDisplays;
     }
 
+    // Class used to serialize data.
     public class Meal
     {
-
         public Meal() { }
         public Meal(string date, string display, float val, string name, DateTime fullDate, float[] stats)
         {

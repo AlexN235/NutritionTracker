@@ -12,34 +12,18 @@ public partial class FoodFactsViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     public List<FoodDisplay> foodList;
 
-    protected NutritionDatabase database;
+    protected NutritionDatabase Database;
 
     public FoodFactsViewModel(NutritionDatabase db) 
     {
-        this.database = db;
+        this.Database = db;
         foodList = new List<FoodDisplay>();
         name = "Test Name";
-    }
-
-    public void setName(string name) {
-        this.Name = name;
-
-        FoodItem f = new FoodItem(name, database.GetFoodNutritionDetails(database.GetClosestID(name)));
-        List<string> names = f.itemsNames;
-        List<float> values = f.itemsValue.ToList();
-
-        List<FoodDisplay> temp = new List<FoodDisplay>();
-        for (int i = 0; i < names.Count; i++)
-            temp.Add(new FoodDisplay(names[i], values[i]));
-
-        FoodList = temp;
-        
     }
 
     [RelayCommand]
     public async Task Back()
     {
-        //Task.Delay(100);
         await Shell.Current.GoToAsync("..");
     }
 
@@ -48,6 +32,19 @@ public partial class FoodFactsViewModel : ObservableObject, IQueryAttributable
         if (query.Count() == 0)
             return;
         FoodDisplay f = (FoodDisplay)query["Food"];
-        setName(f.Name);
+        SetInfo(f.Name);
+    }
+
+    private void SetInfo(string name)
+    {
+        this.Name = name;
+
+        FoodItem f = new FoodItem(name, Database.GetFoodNutritionDetails(Database.GetClosestID(name)));
+        List<string> names = f.itemsNames;
+        List<float> values = f.itemsValue.ToList();
+
+        FoodList = new List<FoodDisplay>();
+        for (int i = 0; i < names.Count; i++)
+            FoodList.Add(new FoodDisplay(names[i], values[i]));
     }
 }

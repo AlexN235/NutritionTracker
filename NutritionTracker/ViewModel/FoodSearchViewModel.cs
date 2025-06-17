@@ -3,9 +3,6 @@ namespace NutruitionTracker.ViewModel;
 
 using CommunityToolkit.Mvvm.Input;
 using NutruitionTracker;
-using NutruitionTracker.NutritionFacts;
-using NutruitionTracker.NutritionFacts.Models;
-using System.Reflection.Metadata;
 
 public partial class FoodSearchViewModel : ObservableObject
 {

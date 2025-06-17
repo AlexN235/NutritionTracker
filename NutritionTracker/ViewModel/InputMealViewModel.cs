@@ -7,7 +7,7 @@ namespace NutruitionTracker.ViewModel;
 
 public partial class InputMealViewModel : ObservableObject
 {
-    private NutritionDatabase database;
+    private NutritionDatabase Database;
 
     [ObservableProperty]
     ObservableCollection<FoodDisplay> foods;
@@ -27,12 +27,7 @@ public partial class InputMealViewModel : ObservableObject
     public InputMealViewModel(NutritionDatabase db)
     {
         foods = new ObservableCollection<FoodDisplay>();
-        this.database = db;
-    }
-
-    partial void OnQueryChanged(string? oldValue, string newValue)
-    {
-        SearchResult = database.GetFoodName(newValue);
+        this.Database = db;
     }
 
     [RelayCommand]
@@ -47,9 +42,9 @@ public partial class InputMealViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(IngrediantText) || string.IsNullOrWhiteSpace(WeightText))
             return;
+        // TO DO: Check for WeightText to be an numbers
 
         // Add selected item, if no selection made add top on list choice.
-
         FoodDisplay display;
         if (SelectedItem != null) 
         {
@@ -57,13 +52,14 @@ public partial class InputMealViewModel : ObservableObject
         }
         else 
         {
-            string name = database.GetClosestName(IngrediantText);
+            string name = Database.GetClosestName(IngrediantText);
             // POSSIBLE ERROR: If no closest choice can be made.
-            FoodItem newItem = new FoodItem(name, database.GetFoodNutritionDetails(database.GetClosestID(name)));
+            FoodItem newItem = new FoodItem(name, Database.GetFoodNutritionDetails(Database.GetClosestID(name)));
             display = new FoodDisplay(name, float.Parse(WeightText), newItem);
         }
         Foods.Add(display);
 
+        // Clear Inputs
         SelectedItem = null;
         IngrediantText = string.Empty;
         WeightText = string.Empty;
@@ -75,14 +71,10 @@ public partial class InputMealViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(MealName))
             return;
-        
-        // Create new meal to send back to Meal page.
-
         FoodDisplay newMeal = new FoodDisplay(this.MealName);
         MealItem f = new MealItem();
 
         // Create list of foods and their weights to combine into the meal.
-
         List<FoodItem> food_list = new List<FoodItem>();
         List<float> weight_list = new List<float>();
         foreach (FoodDisplay food in Foods) { 
@@ -92,7 +84,6 @@ public partial class InputMealViewModel : ObservableObject
         f.AddFoodsToFoodItem(food_list, weight_list);
 
         // Send meal to MealsViewModel and return to Meals Page.
-
         newMeal.AddFoodItem(f);
         await Shell.Current.GoToAsync("..",  new Dictionary<string, object> { ["Meal"] = newMeal });
     }

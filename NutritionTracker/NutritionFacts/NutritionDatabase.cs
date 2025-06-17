@@ -84,12 +84,6 @@ public class NutritionDatabase
             temp.Add(new FoodDisplay(f.food_description));
         }
 
-        foreach (FoodDisplay f in temp) 
-        {
-            if (f.Equals(temp))
-                Debug.WriteLine(f.Name);
-        }
-
         return temp.ToList();
     }
 
