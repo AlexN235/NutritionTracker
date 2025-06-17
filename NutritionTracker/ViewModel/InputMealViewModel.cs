@@ -81,7 +81,7 @@ public partial class InputMealViewModel : ObservableObject
             food_list.Add((FoodItem)food.Item);
             weight_list.Add(food.Value);
         }
-        f.AddFoodsToFoodItem(food_list, weight_list);
+        f.AddFoodsToMeal(food_list, weight_list);
 
         // Send meal to MealsViewModel and return to Meals Page.
         newMeal.AddFoodItem(f);

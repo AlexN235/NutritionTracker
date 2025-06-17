@@ -5,26 +5,26 @@ namespace NutruitionTracker;
 public class FoodItem : EdibleItem, IEquatable<FoodItem>
 {
     public string Name { get; set; }
-    public NutritionDatabase database { get; set; }
-    public Dictionary<string, string> dbNamesTranslation { get; set; }
-    public List<string> itemsNames { get; set; }
-    public float[] itemsValue { get; set; } 
+    public NutritionDatabase Database { get; set; }
+    public Dictionary<string, string> DatabaseNamesTranslation { get; set; }
+    public List<string> ItemsNames { get; set; }
+    public float[] ItemsValue { get; set; } 
 
     public FoodItem()
     {
-        database = new NutritionDatabase();
-        dbNamesTranslation = getDBToReadableDict();
-        itemsNames = initializeItemNames();
-        itemsValue = new float[itemsNames.Count];
+        Database = new NutritionDatabase();
+        DatabaseNamesTranslation = getDatabaseToReadableDictionary();
+        ItemsNames = initializeItemNames();
+        ItemsValue = new float[ItemsNames.Count];
         Name = "N/A";
     }
 
     public FoodItem(String name, List<FoodNutritionDetail> foodNutritionDetails)
     {
-        database = new NutritionDatabase();
-        dbNamesTranslation = getDBToReadableDict();
-        itemsNames = initializeItemNames();
-        itemsValue = new float[itemsNames.Count];
+        Database = new NutritionDatabase();
+        DatabaseNamesTranslation = getDatabaseToReadableDictionary();
+        ItemsNames = initializeItemNames();
+        ItemsValue = new float[ItemsNames.Count];
         Name = name;
 
         foreach (FoodNutritionDetail detail in foodNutritionDetails)
@@ -33,24 +33,31 @@ public class FoodItem : EdibleItem, IEquatable<FoodItem>
 
     public bool Equals(FoodItem? other)
     {
-        if (other == null) return false;
-        int count = this.itemsValue.Count();
-        if(other.itemsValue.Count() != count)
-            return false;
-        for (int i = 0; i<count; i++) 
+        if (other is null) return false;
+        if(other.ItemsValue.Count() != this.ItemsValue.Count()) return false;
+
+        for (int i = 0; i< this.ItemsValue.Count(); i++) 
         {
-            if (!compareFloatEqual(this.itemsValue.ElementAt(i), other.itemsValue.ElementAt(i)))
+            if (!compareFloatEqual(this.ItemsValue.ElementAt(i), other.ItemsValue.ElementAt(i)))
                 return false;
         }
         return true;
     }
 
-    private bool compareFloatEqual(float one, float two) 
-    {
-        return (Math.Abs(one - two) < 0.001);
-    }
 
-    private Dictionary<string, string> getDBToReadableDict()
+
+    // #################################### Helper Functions ####################################
+
+    private List<string> initializeItemNames()
+    {
+        return new List<string> { "Protein", "Fat(total)", "Carbohydrate", "Alcohol", "Energy(calories)", "Energy(kJ)",
+                                  "Fibre", "Sugars",
+                                  "Calcium", "Iron", "Magnesium", "Phosphorus", "Potassium", "Sodium", "Zinc", "Copper", "Manganese",
+                                  "Vitamin B-6", "Vitamin B-12", "Vitamin C", "Vitamin D",
+                                  "Cholesterol", "Caffeine"
+                                };
+    }
+    private Dictionary<string, string> getDatabaseToReadableDictionary()
     {
         var keys = new List<string> { "PROTEIN", "FATTY ACIDS, POLYUNSATURATED, TOTAL", "FATTY ACIDS, MONOUNSATURATED, TOTAL", "FATTY ACIDS, TRANS, TOTAL" , "FATTY ACIDS, SATURATED, TOTAL", "CARBOHYDRATE, TOTAL (BY DIFFERENCE)", "ALCOHOL", "ENERGY (KILOCALORIES)", "ENERGY (KILOJOULES)",
                                       "FIBRE, TOTAL DIETARY", "SUGARS, TOTAL", "SUCROSE",
@@ -67,60 +74,17 @@ public class FoodItem : EdibleItem, IEquatable<FoodItem>
 
         return keys.Zip(values, (k, v) => new { Key = k, Value = v }).ToDictionary(x => x.Key, x => x.Value);
     }
-
-    private List<string> initializeItemNames() 
-    {
-        return new List<string> { "Protein", "Fat(total)", "Carbohydrate", "Alcohol", "Energy(calories)", "Energy(kJ)",
-                                  "Fibre", "Sugars",
-                                  "Calcium", "Iron", "Magnesium", "Phosphorus", "Potassium", "Sodium", "Zinc", "Copper", "Manganese",
-                                  "Vitamin B-6", "Vitamin B-12", "Vitamin C", "Vitamin D",
-                                  "Cholesterol", "Caffeine"
-                                };
-    }
-
     private void addData(FoodNutritionDetail detail) 
     {
-        if (!dbNamesTranslation.ContainsKey(detail.nutrient_name))
+        if (!DatabaseNamesTranslation.ContainsKey(detail.nutrient_name))
             return;
-        string name = dbNamesTranslation[detail.nutrient_name];
+        string name = DatabaseNamesTranslation[detail.nutrient_name];
 
-        int index = itemsNames.IndexOf(name);
-        itemsValue[index] += detail.nutrient_value;
+        int index = ItemsNames.IndexOf(name);
+        ItemsValue[index] += detail.nutrient_value;
+    }
+    private bool compareFloatEqual(float one, float two)
+    {
+        return (Math.Abs(one - two) < 0.001);
     }
 }
-
-/* Proxiamtes:
-    * Protein
-    * Total Fat
-    * Carbohydrate
-    * Alchohol
-    * Energy (kcal)
-    * Energy (kj)
-    * 
-    * Other Carbohydates:
-    * Fibre
-    * Sugar
-    * 
-* Minerals:
-    * Calcium, Ca
-    * Iron, Fe
-    * Magnesium, Mg
-    * Phosphorus, P
-    * Potassium, K
-    * Zinc, Zn
-    * Copper, Cu
-    * Manganese, Mn
-    * Selenium, Se
-    * 
-* Vitamins:
-    * Vitamin B-6
-    * Vitamin B-12
-    * Vitamin C
-    * Vitamin D
-    * Vitamin D (IU)
-    * 
-* Fats:
-    * 
-* Others:
-    * Caffeine
-    */

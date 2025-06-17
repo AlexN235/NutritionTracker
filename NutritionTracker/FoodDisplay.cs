@@ -8,12 +8,10 @@ public class FoodDisplay
     {
         Name = name;
     }
-
     public FoodDisplay(string name, float value) : this(name)
     {
         Value = value;
     }
-
     public FoodDisplay(string name, float value, EdibleItem item) : this(name)
     {
         Value = value;
@@ -28,28 +26,24 @@ public class FoodDisplay
     {
         this.Item = item;
     }
-
     public DateTime GetDate() 
     {
-        if (Item.GetType() == typeof(MealItem))
-            return ((MealItem)Item).Date;
+        if (Item is MealItem Meal) 
+            return Meal.Date;
         return DateTime.Now;
     }
-
     public override bool Equals(Object other) 
     {
-        if (other is not FoodDisplay) return false;
-        if(other == null) return false;
+        if (other is not FoodDisplay display) return false;
 
-        if (this.Item == null)
-            return this.Name == ((FoodDisplay)other).Name;// && this.Item.Equals(((FoodDisplay)other).Item);
+        if (this.Item is null)
+            return this.Name == display.Name;
         else { 
-            if (((FoodDisplay)other).Item == null)
+            if (display.Item is null)
                 return false;
-            return this.Name == ((FoodDisplay)other).Name && this.Item.Equals(((FoodDisplay)other).Item);
+            return this.Name == display.Name && this.Item.Equals(display.Item);
         }
     }
-
     public override int GetHashCode()
     {
         return this.Name.GetHashCode();
