@@ -6,6 +6,7 @@ using Microcharts;
 using NutruitionTracker.NutritionFacts;
 using SkiaSharp;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace NutruitionTracker.ViewModel;
 
@@ -111,6 +112,18 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         CreateLineChart(); // update chart as well
     }
 
+    // Called to ensure date of meals are displayed in the correct order when changes are made.
+    private void SortMealList() 
+    {
+        
+        var sortedList = MealList.OrderByDescending(m => m.Name);
+        MealList.Clear();
+        foreach (var meal in sortedList) 
+        {
+            MealList.Add(meal);
+        }
+    }
+
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.Count == 0)
@@ -171,11 +184,18 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
             File.Create(FilePath);
         }
 
+        ObservableCollection<FoodDisplayGroup> temp = new ObservableCollection<FoodDisplayGroup>();
         using StreamReader reader = new StreamReader(FilePath);
         using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.CurrentCulture))
         {
             var records = csv.GetRecords<Meal>();
-            MealList = new ObservableCollection<FoodDisplayGroup>(MealToFood(records));
+            temp = new ObservableCollection<FoodDisplayGroup>(MealToFood(records));
+        }
+        
+        var sortedMeals = temp.OrderByDescending(m => m.Name);
+        foreach (FoodDisplayGroup day in sortedMeals) 
+        {
+            MealList.Add(day);
         }
     }
 
