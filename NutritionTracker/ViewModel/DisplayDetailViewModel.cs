@@ -34,8 +34,8 @@ public partial class DisplayDetailViewModel : FoodFactsViewModel, IQueryAttribut
         this.Item = food;
         this.Name = food.Name;
 
-        List<string> names = food.Item.itemsNames;
-        List<float> values = food.Item.itemsValue.ToList();
+        List<string> names = food.Item.ItemsNames;
+        List<float> values = food.Item.ItemsValue.ToList();
 
         FoodList = new List<FoodDisplay>();
         for (int i = 0; i < names.Count; i++)

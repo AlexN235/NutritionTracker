@@ -5,13 +5,18 @@
              xmlns:viewmodel="clr-namespace:NutruitionTracker.ViewModel"
              x:DataType="viewmodel:MyMealsViewModel"
              xmlns:local="clr-namespace:NutruitionTracker"
+             xmlns:charts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             xmlns:vm="MicroChartBinding.ViewModels"
              Title="MyMeals">
 
-    <Grid RowDefinitions="45, 1*" Padding="5" BackgroundColor="White">
+    <Grid RowDefinitions="45, 0.5*, 0.5*" Padding="5" BackgroundColor="White">
         <Button Text="Back" FontSize="Small" Command="{Binding GoBackCommand}"
                 Grid.Row="0" HorizontalOptions="Start"/>
+
+        <charts:ChartView x:Name="mealsChart" Chart="{Binding LineChart}" Grid.Row="1"/>
+
         <Grid RowDefinitions="auto, 0.5*, 45"
-              Grid.Row="1" BackgroundColor="White" RowSpacing="10" ColumnSpacing="10" Padding="20">
+              Grid.Row="2" BackgroundColor="White" RowSpacing="10" ColumnSpacing="10" Padding="20">
             <Label Text="Meal Records!" TextColor="Black" FontSize="Medium"
                    Grid.Row="0" HorizontalOptions="Center"/>
             <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Always">

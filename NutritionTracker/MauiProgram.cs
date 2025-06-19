@@ -4,6 +4,9 @@ using CommunityToolkit.Maui;
 using CommunityToolkit.Mvvm;
 using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui.Storage;
+using Microcharts.Maui;
+using SkiaSharp.Views.Maui.Controls.Hosting;
+
 
 namespace NutruitionTracker;
 
@@ -15,7 +18,10 @@ public static class MauiProgram
 		builder
 			.UseMauiApp<App>()
 			.UseMauiCommunityToolkit()
-			.ConfigureFonts(fonts =>
+			.UseMicrocharts()
+			.UseSkiaSharp()
+			
+            .ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
@@ -41,8 +47,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<DisplayDetailPage>();
         builder.Services.AddTransient<DisplayDetailViewModel>();
-		
-
+	
 
 #if DEBUG
         builder.Logging.AddDebug();

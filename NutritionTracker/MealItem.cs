@@ -50,6 +50,12 @@ public class MealItem : EdibleItem, IEquatable<MealItem>
         return true;
     }
 
+    public float GetCalories()
+    {
+        return ItemsValue[4];
+    }
+
+
 
     // #################################### Helper Functions ####################################
 

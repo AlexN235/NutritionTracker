@@ -40,8 +40,8 @@ public partial class FoodFactsViewModel : ObservableObject, IQueryAttributable
         this.Name = name;
 
         FoodItem f = new FoodItem(name, Database.GetFoodNutritionDetails(Database.GetClosestID(name)));
-        List<string> names = f.itemsNames;
-        List<float> values = f.itemsValue.ToList();
+        List<string> names = f.ItemsNames;
+        List<float> values = f.ItemsValue.ToList();
 
         FoodList = new List<FoodDisplay>();
         for (int i = 0; i < names.Count; i++)

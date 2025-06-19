@@ -23,9 +23,15 @@ public class FoodDisplayGroup : List<FoodDisplay>, IEquatable<FoodDisplayGroup>
         this.Add(food);
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, food));
     }
+
+    public DateTime GetDateTime() 
+    {
+        return DateTime.Parse(this.Name);
+    }
+
     public bool Equals(FoodDisplayGroup? other)
     {
-        if (this.Name == other.Name && this.List.Count == other.List.Count)
+        if (this.Name == other.Name) //&& this.List.Count == other.List.Count)
             return true;
         return false;
     }

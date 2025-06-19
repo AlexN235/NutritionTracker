@@ -6,9 +6,10 @@ using System.Diagnostics;
 namespace NutruitionTracker.NutritionFacts;
 public class NutritionDatabase
 {
-    public const string DB_NAME = @"\..\..\..\..\..\Properties\foodinfo.db";
-    string path = System.Environment.ProcessPath + DB_NAME;
-    public SQLiteConnection conn;
+    private const string DB_NAME = @"\..\..\..\..\..\Properties\foodinfo.db";
+    private string path = System.Environment.ProcessPath + DB_NAME;
+    private SQLiteConnection conn;
+
     public NutritionDatabase()
     {
         if (conn != null)
@@ -16,8 +17,8 @@ public class NutritionDatabase
 
         conn = new SQLiteConnection(path);
         conn.CreateTable<Food>();
-        conn.CreateTable<NutrientName>(); ///nutrient_name_id, nutrient_name, unit, nutrient_code
-        conn.CreateTable<NutrientAmount>(); ///food_code, nutrient_value, nutrient_name_idsqlite
+        conn.CreateTable<NutrientName>();   // nutrient_name_id, nutrient_name, unit, nutrient_code
+        conn.CreateTable<NutrientAmount>(); // food_code, nutrient_value, nutrient_name_idsqlite
     }
 
     public List<string> GetFoodName(string name)
@@ -38,38 +39,34 @@ public class NutritionDatabase
         return getBestMatches(name);
     }
 
-    private List<FoodDisplay> getBestMatches(string name, int limit=5) 
+    private List<FoodDisplay> getBestMatches(string name, int limit = 5)
     {
         List<FoodDisplay> foodList = new List<FoodDisplay>();
         HashSet<FoodDisplay> temp = new HashSet<FoodDisplay>();
-        if (name == "")
+        if (name == "" || name.Count() < 2)
             return foodList;
 
-        // Find for exact match looking from start.
-        string query = $"SELECT * FROM food WHERE";
-        query += " food.food_description LIKE " + name + "%'";
-        query += "LIMIT " + limit;
-        // Do something with query.
+        // Get queries that have exact match looking from start.
+        string query = $"SELECT * FROM food WHERE food.food_description LIKE " + name + "%' LIMIT " + limit;
         List<Food> foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
         foreach (Food f in foods)
             temp.Add(new FoodDisplay(f.food_description));
 
-        // Prioritize first word that matching starting and has other matches
+        // Get queries that prioritize first word that matching starting and has other matches
         string[] words = SplitSearchbar(name);
-        if(words.Count()  > 0) {
+        if(words.Count() > 0) {
             query = $"SELECT * FROM food WHERE food.food_description LIKE '%" + words[0] + "%'";
             for (int i = 1; i < words.Length; i++)
             {
                 query += " AND food.food_description LIKE '%" + words[i] + "%'";
             }
+            query += " LIMIT " + limit;
             foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
             foreach (Food f in foods)
                 temp.Add(new FoodDisplay(f.food_description));
         }
-        query += "LIMIT " + limit;
-        // Do something with query.
 
-        // Contains all words
+        // Get queries for entries that contains any words
         query = $"SELECT * FROM food WHERE";
         for (int i = 0; i < words.Length; i++)
         {
@@ -77,10 +74,9 @@ public class NutritionDatabase
                 query += " AND";
             query += " food.food_description LIKE '%" + words[i] + "%'";
         }
+        query += " LIMIT " + limit;
         foods = conn.Query<Food>(GetSQLQuery(name), limit).ToList();
         foreach (Food f in foods) {
-            if (temp.Count() > limit)
-                break;
             temp.Add(new FoodDisplay(f.food_description));
         }
 
@@ -89,14 +85,14 @@ public class NutritionDatabase
 
     public int GetClosestID(string s) 
     {
-        if (s == "") return 100; /// Deal with error.
+        if (s == "") return 100; // Deal with error.
 
         List<Food> q = conn.Query<Food>(GetSQLQuery(s)).ToList();
         return q.First().food_code;
     }
     public string GetClosestName(string s)
     {
-        if (s == "") return ""; /// Deal with error.
+        if (s == "") return ""; // Deal with error.
 
         List<Food> q = conn.Query<Food>(GetSQLQuery(s)).ToList();
         return q.First().food_description;

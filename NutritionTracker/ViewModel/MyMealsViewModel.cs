@@ -1,7 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Converters;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CsvHelper;
+using Microcharts;
 using NutruitionTracker.NutritionFacts;
+using SkiaSharp;
 using System.Collections.ObjectModel;
 
 namespace NutruitionTracker.ViewModel;
@@ -12,6 +15,8 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
     private ObservableCollection<FoodDisplayGroup> mealList;
     [ObservableProperty]
     private FoodDisplay selectedItem;
+    [ObservableProperty]
+    private LineChart lineChart;
 
     private const string FILENAME = "MealInfo.csv";
     private string FilePath { get; set; }
@@ -21,6 +26,7 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         MealList = new ObservableCollection<FoodDisplayGroup>();
         FilePath = Path.Combine(FileSystem.Current.AppDataDirectory, FILENAME);
         ImportLocalData();
+        CreateLineChart();
     }
 
     [RelayCommand]
@@ -54,6 +60,10 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
             {
                 if (group[i].Equals(f)) {
                     group.RemoveAt(i);
+                    if (group.Count == 0) 
+                    {
+                        MealList.Remove(group);
+                    }
                     UpdateList(group.Name);
                 }
             }
@@ -71,7 +81,7 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         else 
         {
             List<FoodDisplay> temp = [newMeal];
-            MealList.Add(new FoodDisplayGroup(date.ToString("d"), temp));
+            MealList.Insert(0, new FoodDisplayGroup(date.ToString("d"), temp));
         }
         UpdateList(date.ToString("d"));
     }
@@ -95,9 +105,10 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
             if (foodDisplays.Name == date)
             {
                 MealList.Remove(foodDisplays);
-                MealList.Add(new FoodDisplayGroup(date, food_list));
+                MealList.Insert(0, new FoodDisplayGroup(date, food_list));
             }
         }
+        CreateLineChart(); // update chart as well
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -121,6 +132,36 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         query?.Clear();
         return;
     }
+
+    private void CreateLineChart() 
+    {
+        List<ChartEntry> entries = new List<ChartEntry>();
+        int lastNumberOfDays = 7;
+        DateTime dateUntil = DateTime.Now.AddDays(-lastNumberOfDays);
+        foreach (FoodDisplayGroup day in MealList) {
+            if (day.GetDateTime() < dateUntil) {
+                break;
+            }
+
+            // get totals for the day and add a new 
+            float dayTotal = 0;
+            foreach (FoodDisplay meal in day) 
+            {
+                dayTotal += (meal.Item as MealItem).GetCalories();
+            }
+            entries.Add(new ChartEntry(dayTotal)
+            {
+                Label = day.Name,
+                ValueLabel = dayTotal.ToString("G"),
+                Color = SKColor.Parse("#00CFFF")
+            });
+        }
+        LineChart = new LineChart { Entries = entries };
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Methods for loading and saving presistent data locally.
+    // ------------------------------------------------------------------------------------------
 
     // Get data from locally saved files and populate the meal list.
     public void ImportLocalData()
@@ -155,7 +196,7 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
                 foreach (FoodDisplay food in group)
                 {
                     MealItem item = (MealItem)food.Item;
-                    Meal meal = new Meal(group.Name, food.Name, food.Value, item.Name, item.Date, item.itemsValue);
+                    Meal meal = new Meal(group.Name, food.Name, food.Value, item.Name, item.Date, item.ItemsValue);
                     meals.Add(meal);
                 }
             }
