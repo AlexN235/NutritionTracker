@@ -8,48 +8,54 @@
              xmlns:charts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
              xmlns:vm="MicroChartBinding.ViewModels"
              Title="MyMeals">
-
-    <Grid RowDefinitions="45, 0.5*, 0.5*" Padding="5" BackgroundColor="White">
-        <Button Text="Back" FontSize="Small" Command="{Binding GoBackCommand}"
-                Grid.Row="0" HorizontalOptions="Start"/>
-
-        <charts:ChartView x:Name="mealsChart" Chart="{Binding LineChart}" Grid.Row="1"/>
-
-        <Grid RowDefinitions="auto, 0.5*, 45"
-              Grid.Row="2" BackgroundColor="White" RowSpacing="10" ColumnSpacing="10" Padding="20">
-            <Label Text="Meal Records!" TextColor="Black" FontSize="Medium"
-                   Grid.Row="0" HorizontalOptions="Center"/>
-            <ScrollView  VerticalScrollBarVisibility="Always">
-                <CollectionView ItemsSource="{Binding MealList}" BackgroundColor="Transparent" IsGrouped="True"
-                                Grid.Row="1" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
-                    <CollectionView.Footer>
-                        <Label Text="End of list." HorizontalOptions="Center"/>
-                    </CollectionView.Footer>
-
-                    <CollectionView.GroupHeaderTemplate>
-                        <DataTemplate x:DataType="local:FoodDisplayGroup">
-                            <Label Text="{Binding Name}" TextColor="Grey" FontSize="Small"/>
-                        </DataTemplate>
-                    </CollectionView.GroupHeaderTemplate>
-
-                    <CollectionView.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SelectionGoToDetailsCommand}"/>
-                    </CollectionView.GestureRecognizers>
-
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="local:FoodDisplay">
-                            <ScrollView VerticalScrollBarVisibility="Always">
-                                <Grid ColumnDefinitions="0.1*, 0.9*" Padding="5">
-                                    <Label HorizontalOptions="Start" x:DataType="{x:Type x:String}" Text="{Binding Name}" TextColor="Black" Grid.Column="1"/>
-                                </Grid>
-                            </ScrollView>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </ScrollView>
-            <Button Text="Add Meal" Grid.Row="2" Command="{Binding GoToAddMealCommand}" 
-                    FontSize="Small" Padding="10" VerticalOptions="End"/>
-        </Grid>
-    </Grid>
     
+
+    <Grid RowDefinitions="45, *, 45" Padding="10" RowSpacing="20" BackgroundColor="#22272b">
+        <Button Text="Back" FontSize="Small" Command="{Binding GoBackCommand}"
+                Grid.Row="0" HorizontalOptions="Start" BackgroundColor="#383e42" TextColor="#767b72"/>
+        <Border Grid.Row="1" >
+            <Border.Stroke>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Color="#767b72" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Border.Stroke>
+            <ScrollView VerticalScrollBarVisibility="Always">
+                <Grid RowDefinitions="auto, 50, auto" BackgroundColor="Transparent" ColumnSpacing="10" Padding="10">
+                    <Border StrokeShape="Rectangle" StrokeThickness="2">
+                        <charts:ChartView x:Name="mealsChart" Chart="{Binding LineChart}" Grid.Row="0" HeightRequest="300"/>
+                    </Border>
+                    <Label Text="Meal Records!" TextColor="White" FontSize="Medium"
+                                   Grid.Row="1" HorizontalOptions="Center"/>
+                    <CollectionView ItemsSource="{Binding MealList}" BackgroundColor="Transparent" IsGrouped="True"
+                                                Grid.Row="2" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
+                        <CollectionView.Footer>
+                            <Label Text="End of list." HorizontalOptions="Center" TextColor="#767b72"/>
+                        </CollectionView.Footer>
+
+                        <CollectionView.GroupHeaderTemplate>
+                            <DataTemplate x:DataType="local:FoodDisplayGroup">
+                                <Label Text="{Binding Name}" TextColor="White" FontSize="Small"/>
+                            </DataTemplate>
+                        </CollectionView.GroupHeaderTemplate>
+
+                        <CollectionView.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SelectionGoToDetailsCommand}"/>
+                        </CollectionView.GestureRecognizers>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="local:FoodDisplay">
+                                <ScrollView VerticalScrollBarVisibility="Always">
+                                    <Grid ColumnDefinitions="0.1*, 0.9*" Padding="5">
+                                        <Label HorizontalOptions="Start" x:DataType="{x:Type x:String}" Text="{Binding Name}" TextColor="#767b72" Grid.Column="1"/>
+                                    </Grid>
+                                </ScrollView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </ScrollView>
+        </Border>
+        <Button Text="Add Meal" Grid.Row="2" Command="{Binding GoToAddMealCommand}" 
+                FontSize="Small" Padding="10" VerticalOptions="End" BackgroundColor="#383e42" TextColor="#767b72"/>
+    </Grid>
 </ContentPage>

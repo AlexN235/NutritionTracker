@@ -166,10 +166,13 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
             {
                 Label = day.Name,
                 ValueLabel = dayTotal.ToString("G"),
-                Color = SKColor.Parse("#00CFFF")
+                ValueLabelColor = SKColor.Parse("#f9fafb"),
+                Color = SKColor.Parse("#90d585")
             });
         }
-        LineChart = new LineChart { Entries = entries };
+        LineChart = new LineChart { Entries = entries, LineMode=LineMode.Straight };
+        LineChart.BackgroundColor = SKColor.Parse("#383e42");
+        LineChart.LabelColor = SKColor.Parse("#f9fafb");
     }
 
     // ------------------------------------------------------------------------------------------
