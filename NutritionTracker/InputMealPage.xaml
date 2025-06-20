@@ -7,56 +7,59 @@
              xmlns:local="clr-namespace:NutruitionTracker"
              Title="InputMealPage">
 
-    <Grid RowDefinitions="50, 230, 0.5*" Padding="10" RowSpacing="10" BackgroundColor="White">
-        <Button Grid.Row="0" Text="GoBack" HorizontalOptions="Start" Command="{Binding GoBackCommand}"/>
-        <Border Grid.Row="1" StrokeThickness="1" Stroke="Black">
-            <Grid  RowDefinitions="50, auto" ColumnDefinitions="0.5*, 0.5*, 0.25*" Padding="10" ColumnSpacing="10" BackgroundColor="Transparent">
-                <SearchBar x:Name="searchBar" Placeholder="Input name of the ingrediant...." Text="{Binding IngrediantText}" 
-                           Grid.Row="0" Grid.Column="0" VerticalOptions="Start" Background="LightGray" TextChanged="SearchBar_TextChanged"/>
-                <Entry Background="LightGray" VerticalOptions="Start" Text="{Binding WeightText}" Placeholder="Input the amount being eaten..." Grid.Row="0" Grid.Column="1"/>
-                <Button Text="Add Ingredient" VerticalOptions="Start" Command="{Binding AddCommand}" Grid.Row="0" Grid.Column="2"/>
-                <CollectionView x:Name="searchResults" ItemsSource="{Binding SearchResult}" HeightRequest="160" BackgroundColor="Transparent" 
-                                Grid.Row="1" Grid.ColumnSpan="3" SelectionMode="Single" SelectionChanged="OnCollectionViewSelectionChanged" VerticalScrollBarVisibility="Always">
+    <Grid RowDefinitions="230, 1, *, auto" RowSpacing="2" BackgroundColor="{StaticResource AppBackgroundColor}">
+        <Grid  RowDefinitions="50, auto" ColumnDefinitions="0.5*, 0.5*, 0.25*" Padding="10" ColumnSpacing="10" 
+               Grid.Row="0" BackgroundColor="Transparent">
+            <SearchBar x:Name="searchBar" Placeholder="Input name of the ingrediant...." Text="{Binding IngrediantText}" 
+                       Grid.Row="0" Grid.Column="0" VerticalOptions="Start" Background="LightGray" TextChanged="SearchBar_TextChanged"/>
+            <Entry Placeholder="Input the amount being eaten..." Text="{Binding WeightText}" VerticalOptions="Start"
+                   Grid.Row="0" Grid.Column="1" Background="LightGray"/>
+            <Button Text="Add Ingredient" VerticalOptions="Start" Command="{Binding AddCommand}" 
+                    Grid.Row="0" Grid.Column="2" BackgroundColor="{StaticResource AppForegroundColor}" TextColor="{StaticResource MildText}"/>
+            <CollectionView x:Name="searchResults" ItemsSource="{Binding SearchResult}" HeightRequest="160" VerticalScrollBarVisibility="Always"
+                            Grid.Row="1" Grid.ColumnSpan="3" BackgroundColor="Transparent"  SelectionMode="Single" SelectionChanged="OnCollectionViewSelectionChanged" >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout BackgroundColor="Transparent" Padding="0">
+                            <Border Stroke="{StaticResource AppForegroundColor}" StrokeThickness="1" Background="{StaticResource AppForegroundColor}" Padding="10" StrokeShape="RoundRectangle 10, 10, 0, 0">
+                                <Label Text="{Binding .}" x:DataType="{x:Type x:String}" TextColor="White" HorizontalOptions="Center"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <Border Grid.Row="1" BackgroundColor="{StaticResource ButtonBackgroundColor}" StrokeThickness="1" Stroke="{StaticResource ButtonText}" />
+
+        <Grid VerticalOptions="Start" RowDefinitions="20, 1*" ColumnDefinitions="0.5*, 0.5*" Padding="10" ColumnSpacing="10"
+              Grid.Row="2" BackgroundColor="{StaticResource AppBackgroundColor}">
+            <Label Text="Ingredients" TextColor="White" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"/>
+            <Label Text="g" TextColor="{StaticResource Text}" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1"/>
+            <ScrollView Grid.Row="1" Grid.ColumnSpan="2">
+                <CollectionView ItemsSource="{Binding Foods}" HorizontalOptions="Center" VerticalScrollBarVisibility="Always">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <VerticalStackLayout BackgroundColor="Transparent" Padding="2">
-                                <Border Stroke="Black" StrokeThickness="1" StrokeShape="Rectangle 0,0,0,0" Background="LightSkyBlue" Padding="10">
-                                    <Label Text="{Binding .}" x:DataType="{x:Type x:String}" TextColor="Black" HorizontalOptions="Center"/>
+                        <DataTemplate x:DataType="local:FoodDisplay">
+                            <Grid ColumnDefinitions="0.5*, 0.5*" BackgroundColor="{StaticResource AppBackgroundColor}" Padding="10" ColumnSpacing="1">
+                                <Border Grid.Column="0" BackgroundColor="{StaticResource AppForegroundColor}" Stroke="{StaticResource AppForegroundColor}"  StrokeShape="RoundRectangle 10, 0, 10, 0"  Padding="10">
+                                    <Label x:DataType="{x:Type x:String}" Text="{Binding Name}" TextColor="White"  HorizontalOptions="Center" />
                                 </Border>
-                            </VerticalStackLayout>
+                                <Border Grid.Column="1" BackgroundColor="{StaticResource AppForegroundColor}" Stroke="{StaticResource AppForegroundColor}" StrokeShape="RoundRectangle 0, 10, 0, 10" Padding="10">
+                                    <Label x:DataType="{x:Type x:Double}" Text="{Binding Value}" TextColor="White"  HorizontalOptions="Center"/>
+                                </Border>
+                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </Grid>
-        </Border>
-
-        <Border Grid.Row="2" StrokeThickness="1" Stroke="Black" >
-            <Grid BackgroundColor="Transparent">
-                <Grid VerticalOptions="Start" RowDefinitions="20, 1*, 55" ColumnDefinitions="0.5*, 0.5*" Padding="10" ColumnSpacing="10">
-                    <Label Text="Ingredients" HorizontalOptions="Center" TextColor="Black" Grid.Row="0" Grid.Column="0"/>
-                    <Label Text="g" HorizontalOptions="Center"  TextColor="Black" Grid.Row="0" Grid.Column="1"/>
-                    <ScrollView Grid.Row="1" Grid.ColumnSpan="2">
-                        <CollectionView ItemsSource="{Binding Foods}" HorizontalOptions="Center" VerticalScrollBarVisibility="Always">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="local:FoodDisplay">
-                                    <Border Padding="5">
-                                        <Grid ColumnDefinitions="0.5*, 0.5*" BackgroundColor="AliceBlue">
-                                            <Label x:DataType="{x:Type x:String}" Text="{Binding Name}" TextColor="Black" Grid.Column="0" HorizontalOptions="Center" />
-                                            <Label x:DataType="{x:Type x:Double}" Text="{Binding Value}" TextColor="Black" Grid.Column="1" HorizontalOptions="Center"/>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </ScrollView>
-                </Grid>
-                <Grid VerticalOptions="End" ColumnDefinitions="4*, 1*" Padding="10" ColumnSpacing="10" BackgroundColor="LightBlue">
-                    <Entry Placeholder="Input name of the meal and press Okay to finish." VerticalOptions="Fill" Text="{Binding MealName}" BackgroundColor="LightGray" Grid.Row="2" Grid.Column="0"/>
-                    <Button Text="Okay" Command="{Binding AddMealCommand}" Grid.Row="2" Grid.Column="2"/>
-                </Grid>
-            </Grid>
-        </Border>
-    </Grid>
+            </ScrollView>
+        </Grid>
         
-    
+        <Grid RowDefinitions="auto, auto" ColumnDefinitions="1*, 1*" Padding="5" RowSpacing="5"
+              Grid.Row="3" BackgroundColor="{StaticResource AppBackgroundColor}" VerticalOptions="End">
+            <Entry  Grid.Row="0" Grid.ColumnSpan="2" Placeholder="Input name of the meal and press Okay to finish." Text="{Binding MealName}" BackgroundColor="LightGray" VerticalOptions="Fill" />
+            <Button Grid.Row="1" Grid.Column="1" BackgroundColor="{StaticResource ButtonBackgroundColor}" TextColor="{StaticResource ButtonText}" Text="Okay" HorizontalOptions="Center" Command="{Binding AddMealCommand}" WidthRequest="200"/>
+            <Button Grid.Row="1" Grid.Column="0" BackgroundColor="{StaticResource ButtonBackgroundColor}" TextColor="{StaticResource ButtonText}" Text="Cancel" HorizontalOptions="Center" Command="{Binding GoBackCommand}" WidthRequest="200"/>
+        </Grid>
+    </Grid>
+
 </ContentPage>

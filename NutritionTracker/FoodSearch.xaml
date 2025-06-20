@@ -7,27 +7,33 @@
              xmlns:local="clr-namespace:NutruitionTracker"
              Title="FoodSearch">
 
-        <VerticalStackLayout BackgroundColor="White">
-            <Label  Text="Food Search" FontSize="36" TextColor="Black"
-                    VerticalOptions="Center"  HorizontalOptions="Center" Margin="20"/>
+    <VerticalStackLayout BackgroundColor="{StaticResource AppBackgroundColor}" Padding="10">
+        <Button Text="Back" Command="{Binding BackCommand}" HeightRequest="45" WidthRequest="100" HorizontalOptions="Start" VerticalOptions="End"
+        BackgroundColor="{StaticResource ButtonBackgroundColor}" TextColor="{StaticResource ButtonText}"/>
+        <Label  Text="Food Search" FontSize="36" TextColor="{StaticResource Text}"
+                VerticalOptions="Center"  HorizontalOptions="Center" Margin="20"/>
 
-            <Grid ColumnDefinitions="0.2*, 0.6*, 0.2*">
-                <SearchBar Text="{Binding SearchBar}" BackgroundColor="LightGray" Grid.Column="1" TextColor="Black" HorizontalOptions="Fill" Margin="20" TextChanged="SearchBar_TextChanged"/>
-            </Grid>
+        <Grid ColumnDefinitions="0.2*, 0.6*, 0.2*">
+            <SearchBar Text="{Binding SearchBar}" TextChanged="SearchBar_TextChanged"  Grid.Column="1" 
+                       TextColor="Black" BackgroundColor="LightGray" HorizontalOptions="Fill" Margin="20" />
+        </Grid>
 
-        <Button Text="Search" HorizontalOptions="Center" WidthRequest="100" HeightRequest="50" Command="{Binding GoToFoodFactsCommand}"/>
+        <Button Text="Search" Command="{Binding GoToFoodFactsCommand}" HorizontalOptions="Center" WidthRequest="100" HeightRequest="50" 
+                BackgroundColor="{StaticResource ButtonBackgroundColor}" TextColor="{StaticResource Text}" />
 
         <Grid Padding="50">
-            <CollectionView x:Name="SelectionCollection" BackgroundColor="Grey" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
+            <CollectionView x:Name="SelectionCollection" BackgroundColor="{StaticResource AppForegroundColor}" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="local:FoodDisplay">
                         <Grid Padding="10">
-                            <Label Text="{Binding Name}"/>
+                            <Label Text="{Binding Name}" TextColor="{StaticResource MildText}"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Grid>
-        </VerticalStackLayout>
+
+        
+    </VerticalStackLayout>
 
 </ContentPage>

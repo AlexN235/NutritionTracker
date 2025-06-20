@@ -6,6 +6,14 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
+    <Color x:Key="AppBackgroundColor">#22272b</Color>
+    <Color x:Key="AppForegroundColor">#383e42</Color>
+    <Color x:Key="ButtonBackgroundColor">#383e42</Color>
+    <Color x:Key="BorderColor">#767b72</Color>
+    <Color x:Key="ButtonText">#767b72</Color>
+    <Color x:Key="MildText">#767b72</Color>
+    <Color x:Key="Text">White</Color>
+
     <Color x:Key="Primary">#512BD4</Color>
     <Color x:Key="PrimaryDark">#ac99ea</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>

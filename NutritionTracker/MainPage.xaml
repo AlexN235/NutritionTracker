@@ -5,34 +5,27 @@
              xmlns:viewmodel="clr-namespace:NutruitionTracker.ViewModel"
              x:DataType="viewmodel:MainViewModel"
              BackgroundColor="White">
-    
-    <Grid 
-        BackgroundColor="Transparent"
-        Padding="20"
-        RowSpacing="20"
-        ColumnSpacing="20"
-        RowDefinitions="*, auto, auto, 20*"
-        ColumnDefinitions="50, *, 50"
-        Margin="50">
+    <ContentPage.Resources>
+        <ResourceDictionary Source="/Resources/Styles/Colors.xaml"/>
+    </ContentPage.Resources>
 
+    <Grid RowDefinitions="0.4*, 0.5*, 0.1*" RowSpacing="20" ColumnSpacing="10" ColumnDefinitions="20, *, 20"
+        BackgroundColor="{StaticResource AppBackgroundColor}">
 
-        <Button Text="Nutrition Facts Search" 
-                SemanticProperties.Hint="Check nutrition facts."
-                Command="{Binding GoToFoodSearchCommand}"
-                Grid.Row="1"
-                Grid.Column="1"
-                BorderWidth="2"
-                BorderColor="Grey"/>
+        <Image Source="main_page_stock.jpg" Aspect="AspectFill"  Grid.Row="0" Grid.ColumnSpan="3"/>
 
-        <Button Text="Meals Record"
-                Command="{Binding GoToMealsCommand}"
-                Grid.Row="2"
-                Grid.Column="1"
-                BorderWidth="2"
-                BorderColor="Grey"/>
+        <Border Grid.Row="1" Grid.Column="1" Stroke="{StaticResource ButtonText}">
+            <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="0.3*, 0.3*, 0.3*" ColumnDefinitions="0.5*, 0.5*"
+              RowSpacing="50" ColumnSpacing="50" Padding="10">
+                <Button Text="Nutrition Facts Search" Command="{Binding GoToFoodSearchCommand}"
+                        Grid.Row="0" Grid.Column="0" BorderWidth="2" HeightRequest="50"
+                        BackgroundColor="{StaticResource ButtonBackgroundColor}" TextColor="{StaticResource White}"/>
 
+                <Button Text="Meal Records" Command="{Binding GoToMealsCommand}"
+                        Grid.Row="0" Grid.Column="1" BorderWidth="2" HeightRequest="50"
+                        BackgroundColor="{StaticResource ButtonBackgroundColor}" TextColor="{StaticResource White}"/>
+            </Grid>
+        </Border>
     </Grid>
     
-   
-
 </ContentPage>

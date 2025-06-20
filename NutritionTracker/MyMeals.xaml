@@ -8,45 +8,40 @@
              xmlns:charts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
              xmlns:vm="MicroChartBinding.ViewModels"
              Title="MyMeals">
-    
 
-    <Grid RowDefinitions="45, *, 45" Padding="10" RowSpacing="20" BackgroundColor="#22272b">
-        <Button Text="Back" FontSize="Small" Command="{Binding GoBackCommand}"
-                Grid.Row="0" HorizontalOptions="Start" BackgroundColor="#383e42" TextColor="#767b72"/>
-        <Border Grid.Row="1" >
+    <Grid RowDefinitions="*, 45" Padding="10" RowSpacing="20" BackgroundColor="{StaticResource AppBackgroundColor}">
+        <Border Grid.Row="0" >
             <Border.Stroke>
                 <LinearGradientBrush EndPoint="0,1">
-                    <GradientStop Color="#767b72" Offset="1.0"/>
+                    <GradientStop Color="{StaticResource BorderColor}" Offset="1.0"/>
                 </LinearGradientBrush>
             </Border.Stroke>
+
             <ScrollView VerticalScrollBarVisibility="Always">
                 <Grid RowDefinitions="auto, 50, auto" BackgroundColor="Transparent" ColumnSpacing="10" Padding="10">
                     <Border StrokeShape="Rectangle" StrokeThickness="2">
                         <charts:ChartView x:Name="mealsChart" Chart="{Binding LineChart}" Grid.Row="0" HeightRequest="300"/>
                     </Border>
                     <Label Text="Meal Records!" TextColor="White" FontSize="Medium"
-                                   Grid.Row="1" HorizontalOptions="Center"/>
+                           Grid.Row="1" HorizontalOptions="Center"/>
                     <CollectionView ItemsSource="{Binding MealList}" BackgroundColor="Transparent" IsGrouped="True"
-                                                Grid.Row="2" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
+                                    Grid.Row="2" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
                         <CollectionView.Footer>
-                            <Label Text="End of list." HorizontalOptions="Center" TextColor="#767b72"/>
+                            <Label Text="End of list." HorizontalOptions="Center" TextColor="{StaticResource MildText}"/>
                         </CollectionView.Footer>
-
                         <CollectionView.GroupHeaderTemplate>
                             <DataTemplate x:DataType="local:FoodDisplayGroup">
-                                <Label Text="{Binding Name}" TextColor="White" FontSize="Small"/>
+                                <Label Text="{Binding Name}" TextColor="{StaticResource Text}" FontSize="Small"/>
                             </DataTemplate>
                         </CollectionView.GroupHeaderTemplate>
-
                         <CollectionView.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding SelectionGoToDetailsCommand}"/>
                         </CollectionView.GestureRecognizers>
-
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="local:FoodDisplay">
                                 <ScrollView VerticalScrollBarVisibility="Always">
                                     <Grid ColumnDefinitions="0.1*, 0.9*" Padding="5">
-                                        <Label HorizontalOptions="Start" x:DataType="{x:Type x:String}" Text="{Binding Name}" TextColor="#767b72" Grid.Column="1"/>
+                                        <Label HorizontalOptions="Start" x:DataType="{x:Type x:String}" Text="{Binding Name}" TextColor="{StaticResource MildText}" Grid.Column="1"/>
                                     </Grid>
                                 </ScrollView>
                             </DataTemplate>
@@ -55,7 +50,13 @@
                 </Grid>
             </ScrollView>
         </Border>
-        <Button Text="Add Meal" Grid.Row="2" Command="{Binding GoToAddMealCommand}" 
-                FontSize="Small" Padding="10" VerticalOptions="End" BackgroundColor="#383e42" TextColor="#767b72"/>
+ 
+        <Grid Grid.Row="1" ColumnDefinitions="0.5*, 0.5*" BackgroundColor="{StaticResource AppBackgroundColor}">
+            <Button Text="Back" Command="{Binding GoBackCommand}" WidthRequest="250"
+                    Grid.Column="0" Grid.Row="0" FontSize="Small" BackgroundColor="{StaticResource AppForegroundColor}" TextColor="{StaticResource MildText}"/>
+            <Button Text="Add Meal" Command="{Binding GoToAddMealCommand}" WidthRequest="250"
+                    Grid.Column="1" FontSize="Small" BackgroundColor="{StaticResource AppForegroundColor}" TextColor="{StaticResource MildText}"/>
+        </Grid>
     </Grid>
+    
 </ContentPage>

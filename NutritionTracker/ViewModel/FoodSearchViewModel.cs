@@ -27,4 +27,10 @@ public partial class FoodSearchViewModel : ObservableObject
         };
         await Shell.Current.GoToAsync(nameof(FoodFacts), dict);
     }
+
+    [RelayCommand]
+    async Task Back() 
+    {
+        await Shell.Current.GoToAsync("..");
+    }
 }
