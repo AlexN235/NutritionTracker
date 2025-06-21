@@ -85,23 +85,31 @@ public class NutritionDatabase
 
     public int GetClosestID(string s) 
     {
-        if (s == "") return 100; // Deal with error.
+        if (s == "")  throw new InvalidPropertyForDatabaseQuery("Unable to obtain database query with property"); // Deal with error.
 
         List<Food> q = conn.Query<Food>(GetSQLQuery(s)).ToList();
+        if (q.Count == 0)
+            throw new InvalidPropertyForDatabaseQuery();
         return q.First().food_code;
     }
     public string GetClosestName(string s)
     {
-        if (s == "") return ""; // Deal with error.
+        if (s == "") throw new InvalidPropertyForDatabaseQuery();
 
         List<Food> q = conn.Query<Food>(GetSQLQuery(s)).ToList();
+        if (q.Count == 0) 
+            throw new InvalidPropertyForDatabaseQuery();
+
         return q.First().food_description;
     }
 
     public string GetNameWithID(int id)
     {
+        if (id < 0) throw new InvalidPropertyForDatabaseQuery();
 
         List<Food> q = conn.Query<Food>(GetSQLQueryWithID(id)).ToList();
+        if (q.Count == 0)
+            throw new InvalidPropertyForDatabaseQuery();
         return q.First().food_description;
     }
 

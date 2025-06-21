@@ -39,7 +39,15 @@ public partial class FoodFactsViewModel : ObservableObject, IQueryAttributable
     {
         this.Name = name;
 
-        FoodItem f = new FoodItem(name, Database.GetFoodNutritionDetails(Database.GetClosestID(name)));
+        FoodItem f;
+        try
+        {
+            f = new FoodItem(name, Database.GetFoodNutritionDetails(Database.GetClosestID(name)));
+        }
+        catch (InvalidPropertyForDatabaseQuery ex)
+        {
+            return;
+        }
         List<string> names = f.ItemsNames;
         List<float> values = f.ItemsValue.ToList();
 

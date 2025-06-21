@@ -40,9 +40,10 @@ public partial class InputMealViewModel : ObservableObject
     [RelayCommand]
     void Add() 
     {
-        if (string.IsNullOrWhiteSpace(IngrediantText) || string.IsNullOrWhiteSpace(WeightText))
+        if (string.IsNullOrWhiteSpace(IngrediantText) 
+            || string.IsNullOrWhiteSpace(WeightText) 
+            || !float.TryParse(WeightText, out _))
             return;
-        // TO DO: Check for WeightText to be an numbers
 
         // Add selected item, if no selection made add top on list choice.
         FoodDisplay display;
@@ -52,9 +53,20 @@ public partial class InputMealViewModel : ObservableObject
         }
         else 
         {
-            string name = Database.GetClosestName(IngrediantText);
-            // POSSIBLE ERROR: If no closest choice can be made.
-            FoodItem newItem = new FoodItem(name, Database.GetFoodNutritionDetails(Database.GetClosestID(name)));
+            string name;
+            try 
+            { name = Database.GetClosestName(IngrediantText); }
+            catch (InvalidPropertyForDatabaseQuery ex) { return; }
+
+            FoodItem newItem;
+            try
+            {
+                newItem = new FoodItem(name, Database.GetFoodNutritionDetails(Database.GetClosestID(name)));
+            }
+            catch (InvalidPropertyForDatabaseQuery ex)
+            {
+                return;
+            }
             display = new FoodDisplay(name, float.Parse(WeightText), newItem);
         }
         Foods.Add(display);

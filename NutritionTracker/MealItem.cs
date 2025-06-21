@@ -1,4 +1,5 @@
 ﻿using NutruitionTracker.NutritionFacts;
+using System.Xml.Linq;
 
 namespace NutruitionTracker;
 
@@ -65,7 +66,14 @@ public class MealItem : EdibleItem, IEquatable<MealItem>
     }
     private void AddFood(FoodItem f, float weight)
     {
-        AddFoodFromDatabase(Database.GetClosestID(f.Name), weight);
+        try 
+        { 
+            AddFoodFromDatabase(Database.GetClosestID(f.Name), weight);
+        }
+        catch (InvalidPropertyForDatabaseQuery ex) 
+        { 
+            return;
+        }
     }
     private void AddFoodFromDatabase(int food_id, float weight)
     {
