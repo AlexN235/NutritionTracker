@@ -6,6 +6,7 @@ using Microcharts;
 using NutruitionTracker.NutritionFacts;
 using SkiaSharp;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace NutruitionTracker.ViewModel;
@@ -17,7 +18,9 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     private FoodDisplay selectedItem;
     [ObservableProperty]
-    private LineChart lineChart;
+    private Chart myChart;
+    [ObservableProperty]
+    private float chartTotalCalories;
 
     private const string FILENAME = "MealInfo.csv";
     private string FilePath { get; set; }
@@ -51,6 +54,24 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
             ["Food"] = SelectedItem
         };
         await Shell.Current.GoToAsync(nameof(DisplayDetailPage), dict);
+    }
+
+    [RelayCommand]
+    public void SetBarChartForToday() 
+    {
+        CreatePieChart();
+    }
+
+    [RelayCommand]
+    public void SetBarChartForLastThreeDays()
+    {
+        CreateLineChart(3);
+    }
+
+    [RelayCommand]
+    public void SetBarChartForWeek()
+    {
+        CreateLineChart();
     }
 
     private void DeleteMeal(FoodDisplay f) 
@@ -146,11 +167,12 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
         return;
     }
 
-    private void CreateLineChart() 
+    private void CreateLineChart(int lastNumberOfDays = 7) 
     {
+        ChartTotalCalories = 0;
         List<ChartEntry> entries = new List<ChartEntry>();
-        int lastNumberOfDays = 7;
         DateTime dateUntil = DateTime.Now.AddDays(-lastNumberOfDays);
+        
         foreach (FoodDisplayGroup day in MealList) {
             if (day.GetDateTime() < dateUntil) {
                 break;
@@ -169,10 +191,54 @@ public partial class MyMealsViewModel : ObservableObject, IQueryAttributable
                 ValueLabelColor = SKColor.Parse("#f9fafb"),
                 Color = SKColor.Parse("#90d585")
             });
+            ChartTotalCalories += dayTotal;
         }
-        LineChart = new LineChart { Entries = entries, LineMode=LineMode.Straight };
-        LineChart.BackgroundColor = SKColor.Parse("#383e42");
-        LineChart.LabelColor = SKColor.Parse("#f9fafb");
+        MyChart = new LineChart { Entries = entries, LineMode=LineMode.Straight };
+        SetChartSettings();
+    }
+
+    private void CreatePieChart() 
+    {
+        String today = DateTime.Now.ToString("d");
+        FoodDisplayGroup lastestDaysEntry = MealList.ElementAt(0);
+        List<ChartEntry> entries = new List<ChartEntry>();
+        ChartTotalCalories = 0;
+
+        if (lastestDaysEntry.Name != today)
+        {
+            entries.Add(new ChartEntry(0)
+            {
+                Label = "N/A",
+                ValueLabel = "0",
+                ValueLabelColor = SKColor.Parse("#f9fafb"),
+                Color = SKColor.Parse("#90d585")
+            });
+            MyChart = new PieChart { Entries = entries };
+            return;
+        }
+
+        Random rd = new Random();
+        foreach (FoodDisplay meal in lastestDaysEntry.List)
+        {
+            string color = String.Format("#{0:X6}", rd.Next(0x1000000));
+            float mealTotal = meal.Item.ItemsValue.ElementAt(4);
+            entries.Add(new ChartEntry(mealTotal)
+            {
+                Label = meal.Name,
+                ValueLabel = mealTotal.ToString(),
+                ValueLabelColor = SKColor.Parse(color),
+                Color = SKColor.Parse(color),
+            });
+            ChartTotalCalories += mealTotal;
+        }
+        MyChart = new PieChart { Entries = entries };
+        SetChartSettings();
+    }
+
+    private void SetChartSettings() 
+    {
+        MyChart.BackgroundColor = SKColor.Parse("#383e42");
+        MyChart.LabelColor = SKColor.Parse("#f9fafb");
     }
 
     // ------------------------------------------------------------------------------------------

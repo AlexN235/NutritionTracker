@@ -7,7 +7,8 @@
              xmlns:local="clr-namespace:NutruitionTracker"
              xmlns:charts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
              xmlns:vm="MicroChartBinding.ViewModels"
-             Title="MyMeals">
+             Title="MyMeals"
+             x:Name="global">
 
     <Grid RowDefinitions="*, 45" Padding="10" RowSpacing="20" BackgroundColor="{StaticResource AppBackgroundColor}">
         <Border Grid.Row="0" >
@@ -20,7 +21,19 @@
             <ScrollView VerticalScrollBarVisibility="Always">
                 <Grid RowDefinitions="auto, 50, auto" BackgroundColor="Transparent" ColumnSpacing="10" Padding="10">
                     <Border StrokeShape="Rectangle" StrokeThickness="2">
-                        <charts:ChartView x:Name="mealsChart" Chart="{Binding LineChart}" Grid.Row="0" HeightRequest="300"/>
+                        <Grid ColumnDefinitions="0.8*, 0.2*">
+                            <charts:ChartView x:Name="mealsChart" Chart="{Binding MyChart}" Grid.Column="0" HeightRequest="300"/>
+                            <VerticalStackLayout Grid.Column="1" Padding="10" Spacing="20">
+                                <Label Text="Total Calories Consumed" HorizontalOptions="Center"/>
+                                <Label Text="{Binding ChartTotalCalories}" HorizontalOptions="Center" TextColor="{StaticResource MildText}"/>
+                                <Button Text="Today" Command="{Binding SetBarChartForTodayCommand}" HorizontalOptions="Center" VerticalOptions="Center" 
+                                        BackgroundColor="{StaticResource ButtonBackgroundColor}" TextColor="{StaticResource ButtonText}" HeightRequest="50" WidthRequest="100"/>
+                                <Button Text="3 Days" Command="{Binding SetBarChartForLastThreeDaysCommand}" HorizontalOptions="Center" VerticalOptions="Center" 
+                                        BackgroundColor="{StaticResource ButtonBackgroundColor}" TextColor="{StaticResource ButtonText}" HeightRequest="50" WidthRequest="100"/>
+                                <Button Text="Week" Command="{Binding SetBarChartForWeekCommand}" HorizontalOptions="Center" VerticalOptions="Center" 
+                                        BackgroundColor="{StaticResource ButtonBackgroundColor}" TextColor="{StaticResource ButtonText}" HeightRequest="50" WidthRequest="100"/>
+                            </VerticalStackLayout>
+                        </Grid>
                     </Border>
                     <Label Text="Meal Records!" TextColor="White" FontSize="Medium"
                            Grid.Row="1" HorizontalOptions="Center"/>
