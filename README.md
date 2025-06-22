@@ -23,13 +23,13 @@ You can add a meal you've eaten by searching and combining a list of ingredients
 
 ## Class Summary
 
-**FoodDisplay**
+**FoodDisplay**<br/>
   Used anywhere information about a food needs to be displayed. It contains the EdibleItem (FoodItem, MealItem) class which contains all the necessary info about that item.
 
-**FoodDisplayGroup** 
+**FoodDisplayGroup**<br/>
   Similar to FoodDisplay but groups them together based on a value. Used exclusively for the MyMeal page to group meals based on a date.
 
-**NutritionDatabase**
+**NutritionDatabase**<br/>
   Has access to the database use for getting all the food information and pulls queries using a name or id. Does this by using SQLite and the FoodNutritionDetail class to pull data from the foodinfo.db file.
 
 
