@@ -5,11 +5,11 @@ A personal project that is an application which tracks nutrition consumed by the
 This app has two main features: a search feature that allows the user to search for a variety of food and their nutrition facts from the database and a recording feature that records the meals the user eats.
 
 ## Search
-![](https://youtu.be/a8jCKsyJlo0)
+[![](https://img.youtube.com/vi/a8jCKsyJlo0/0.jpg)](https://www.youtube.com/watch?v=a8jCKsyJlo0)
 Looking up the nutrition facts for an ingredient.
 
 ## Record
-![](https://www.youtube.com/embed/a8jCKsyJlo0?si=A3Yu_d5Q2COn7fDB)
+![](docs/videos/add.mp4)
 You can add a meal you've eaten by searching and combining a list of ingredients with the total amount. The page also displays a chart of total calories you have recently consumed. 
 
 
