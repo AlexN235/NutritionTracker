@@ -9,7 +9,7 @@ This app has two main features: a search feature that allows the user to search 
 Looking up the nutrition facts for an ingredient.
 
 ## Record
-![](<iframe width="560" height="315" src="https://www.youtube.com/embed/a8jCKsyJlo0?si=A3Yu_d5Q2COn7fDB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>)
+![](https://www.youtube.com/embed/a8jCKsyJlo0?si=A3Yu_d5Q2COn7fDB)
 You can add a meal you've eaten by searching and combining a list of ingredients with the total amount. The page also displays a chart of total calories you have recently consumed. 
 
 
