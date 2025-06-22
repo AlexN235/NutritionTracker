@@ -5,11 +5,11 @@ A personal project that is an application which tracks nutrition consumed by the
 This app has two main features: a search feature that allows the user to search for a variety of food and their nutrition facts from the database and a recording feature that records the meals the user eats.
 
 ## Search
-(import video here)
+![](README%20files/NutruitionTracker%20-%20search%20example.mp4)
 Looking up the nutrition facts for an ingredient.
 
 ## Record
-(import video here)
+![](README%20files/NutruitionTracker%20-%20add%20example.mp4)
 You can add a meal you've eaten by searching and combining a list of ingredients with the total amount. The page also displays a chart of total calories you have recently consumed. 
 
 
@@ -24,13 +24,13 @@ You can add a meal you've eaten by searching and combining a list of ingredients
 ## Class Summary
 
 **FoodDisplay**
-Used anywhere information about a food needs to be displayed. It contains the EdibleItem (FoodItem, MealItem) class which contains all the necessary info about that item.
+  Used anywhere information about a food needs to be displayed. It contains the EdibleItem (FoodItem, MealItem) class which contains all the necessary info about that item.
 
 **FoodDisplayGroup** 
-Similar to FoodDisplay but groups them together based on a value. Used exclusively for the MyMeal page to group meals based on a date.
+  Similar to FoodDisplay but groups them together based on a value. Used exclusively for the MyMeal page to group meals based on a date.
 
 **NutritionDatabase**
-Has access to the database use for getting all the food information and pulls queries using a name or id. Does this by using SQLite and the FoodNutritionDetail class to pull data from the foodinfo.db file.
+  Has access to the database use for getting all the food information and pulls queries using a name or id. Does this by using SQLite and the FoodNutritionDetail class to pull data from the foodinfo.db file.
 
 
 
